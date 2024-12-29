@@ -5,11 +5,16 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
-import io.FaiscaJsr.DungeonsGame.entities.Ground;
+
+import io.FaiscaJsr.DungeonsGame.entities.Map;
+import io.FaiscaJsr.DungeonsGame.entities.Tile;
+import io.FaiscaJsr.DungeonsGame.entities.TileMap;
+
 
 
 public class PlayScreen implements Screen{
@@ -17,13 +22,17 @@ public class PlayScreen implements Screen{
 	Texture texture;
 	private OrthographicCamera camera;
 	private Viewport viewport;
+	private Map map;
+	TileMap tilemap;
 
 	public PlayScreen(Main game) {
 		super();
 		this.game = game;
 		texture = new Texture("libgdx.png");
 		camera = new OrthographicCamera();
-		viewport = new FitViewport(800, 480,camera);
+		viewport = new FitViewport(1920, 1080,camera);
+		map =new Map();
+		tilemap = new TileMap(new Vector2(0-TileMap.getWidth()*Tile.DIM,0-TileMap.getHeight()*Tile.DIM)); 
 	}
 
 	@Override
@@ -33,17 +42,20 @@ public class PlayScreen implements Screen{
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(255,255,255,1);
+		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
-		game.batch.draw(new Ground(0, 0).getSprite(), 0, 0);
+		game.batch.setProjectionMatrix(camera.combined);
+		camera.update();
+		tilemap.createFloors(game.batch);
+		// map.createFloors(game.batch);
 		game.batch.end();
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
+
 	}
 
 	@Override

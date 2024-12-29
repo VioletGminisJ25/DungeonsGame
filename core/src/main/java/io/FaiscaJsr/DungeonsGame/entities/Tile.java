@@ -13,6 +13,7 @@ public abstract class Tile extends Entity{
 	public Tile(float x, float y, Sprite sprite) {
 		super(x, y, DIM, DIM);
 		this.sprite = sprite;
+		this.sprite.setPosition(x, y);
 	}
 
 	@Override
