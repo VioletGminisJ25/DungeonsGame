@@ -1,5 +1,5 @@
 
-package io.FaiscaJsr.DungeonsGame.entities;
+package io.FaiscaJsr.DungeonsGame.entities.TileMap;
 
 import io.FaiscaJsr.DungeonsGame.ResourceLoader;
 

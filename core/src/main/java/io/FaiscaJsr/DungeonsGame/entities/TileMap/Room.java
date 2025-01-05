@@ -1,21 +1,22 @@
-package io.FaiscaJsr.DungeonsGame.entities;
+package io.FaiscaJsr.DungeonsGame.entities.TileMap;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import io.FaiscaJsr.DungeonsGame.ResourceLoader;
 
 //TODO: Investigar sobre la generacion del suelo y paredes
 
-public class TileMap {
-	private static final int HEIGHT = 5;
-	public static int getHeight() {
+public class Room {
+	private int HEIGHT;
+	public int getHeight() {
 		return HEIGHT;
 	}
 
-	private static final int WIDTH = 10;
-	public static int getWidth() {
+	private int WIDTH;
+	public int getWidth() {
 		return WIDTH;
 	}
 
@@ -26,16 +27,33 @@ public class TileMap {
 	}
 
 	public GridSpace[][] grid;
+	
+	public Rectangle hitbox;
+	public Vector2 center;
 
-	public TileMap(Vector2 position) {
+
+	public Room(Vector2 position,int width,int height) {
 		setup();
 		this.initialPosition = position;
+		this.WIDTH = width;
+		this.HEIGHT = height;
+		hitbox = new Rectangle(initialPosition.x-32,initialPosition.y+32,WIDTH*32+64,HEIGHT*32+64);
+		this.center = new Vector2(Math.round((initialPosition.x + initialPosition.x+width) / 2),Math.round((initialPosition.y + initialPosition.y+height) / 2));
+
+		// System.out.println("Room: " + hitbox);
+	}
+	public boolean intersects(Room room){
+		return (initialPosition.x <= room.initialPosition.x+room.WIDTH && initialPosition.x+this.WIDTH >= room.initialPosition.x && initialPosition.y <= room.initialPosition.y+room.HEIGHT && room.initialPosition.y+room.HEIGHT >= room.initialPosition.y);
+	}
+
+	public boolean collidesWith(Room other) {
+		return hitbox.overlaps(other.hitbox);
 	}
 
 	public void setup() {
 
 		grid = new GridSpace[WIDTH][HEIGHT];
-		System.out.println();
+
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				if (i == 0 || j == 0 || j == grid[i].length - 1 || i == grid.length - 1) {
@@ -44,12 +62,9 @@ public class TileMap {
 					grid[i][j] = GridSpace.floor;
 				}
 
-				System.out.print(grid[i][j]);
-
 			}
-			System.out.println();
-		}
 
+		}
 	}
 
 	public void createFloors(SpriteBatch batch) {

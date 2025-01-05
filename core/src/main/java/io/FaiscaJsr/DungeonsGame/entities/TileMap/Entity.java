@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.entities;
+package io.FaiscaJsr.DungeonsGame.entities.TileMap;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -6,11 +6,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public abstract class Entity {
 
-	private Vector2 position;
+	protected Vector2 position;
 	private Rectangle hitbox;
 	public abstract Sprite getSprite();
 	public Entity(float x, float y, int width, int height) {
-		position = new Vector2();
+		position = new Vector2(x,y);
 		hitbox = new Rectangle(x,y,width,height);
 		hitbox.getPosition(position);
 	}
