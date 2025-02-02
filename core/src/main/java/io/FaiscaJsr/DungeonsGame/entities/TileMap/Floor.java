@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.entities.TileMap;
+package io.FaiscaJsr.DungeonsGame.Entities.TileMap;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -13,5 +13,5 @@ public class Floor extends Tile{
 		super(x,y,floor);
 		floor.setRotation(rotationDegrees);
 	}
-    
+
 }

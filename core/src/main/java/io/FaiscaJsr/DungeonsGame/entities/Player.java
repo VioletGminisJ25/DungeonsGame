@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.entities;
+package io.FaiscaJsr.DungeonsGame.Entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;

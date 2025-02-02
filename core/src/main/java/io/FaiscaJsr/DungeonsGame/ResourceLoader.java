@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
+import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Tile;
 
 public class ResourceLoader {
 	static Texture tiles = new Texture("tileset_complet.png");

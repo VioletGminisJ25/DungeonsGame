@@ -17,11 +17,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Entities.BspTree;
+import io.FaiscaJsr.DungeonsGame.Entities.Player;
+import io.FaiscaJsr.DungeonsGame.Entities.VirtualJoystick;
+import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Tile;
 import io.FaiscaJsr.DungeonsGame.Tools.WorldContactListener;
-import io.FaiscaJsr.DungeonsGame.entities.BspTree;
-import io.FaiscaJsr.DungeonsGame.entities.Player;
-import io.FaiscaJsr.DungeonsGame.entities.VirtualJoystick;
-import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
 
 public class PlayScreen implements Screen {
 	private Main game;

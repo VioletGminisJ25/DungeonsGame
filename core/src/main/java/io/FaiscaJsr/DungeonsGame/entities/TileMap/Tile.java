@@ -1,8 +1,8 @@
-package io.FaiscaJsr.DungeonsGame.entities.TileMap;
+package io.FaiscaJsr.DungeonsGame.Entities.TileMap;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import io.FaiscaJsr.DungeonsGame.entities.Entity;
+import io.FaiscaJsr.DungeonsGame.Entities.Entity;
 
 public abstract class Tile extends Entity{
 	public static final int DIM = 32;

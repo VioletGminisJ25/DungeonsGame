@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.entities;
+package io.FaiscaJsr.DungeonsGame.Entities;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import io.FaiscaJsr.DungeonsGame.entities.Room.Room;
-import io.FaiscaJsr.DungeonsGame.entities.TileMap.Floor;
-import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
+import io.FaiscaJsr.DungeonsGame.Entities.Room.Room;
+import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Floor;
+import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Tile;
 
 public class BspTree {
 	public Rectangle container;

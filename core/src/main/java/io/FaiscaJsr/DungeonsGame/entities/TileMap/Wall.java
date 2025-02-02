@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.entities.TileMap;
+package io.FaiscaJsr.DungeonsGame.Entities.TileMap;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;

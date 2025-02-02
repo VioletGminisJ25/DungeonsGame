@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.entities;
+package io.FaiscaJsr.DungeonsGame.Entities;
 
 import java.util.Random;
 
