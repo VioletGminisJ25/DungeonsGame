@@ -2,13 +2,13 @@ package io.FaiscaJsr.DungeonsGame.entities.TileMap;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import io.FaiscaJsr.DungeonsGame.entities.Entity;
+
 public abstract class Tile extends Entity{
-	public static final int DIM = 16;
+	public static final int DIM = 32;
+	// public static final int DIM = 16;
 	private Sprite sprite;
 
-	// public enum TileType {
-	// 	wall, floor
-	// }
 
 	public Tile(float x, float y, Sprite sprite) {
 		super(x, y, DIM, DIM);
@@ -30,5 +30,5 @@ public abstract class Tile extends Entity{
 	public void update(float dt) {
 		// TODO Auto-generated method stub
 	}
-	
+
 }

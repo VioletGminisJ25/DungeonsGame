@@ -1,22 +1,26 @@
 package io.FaiscaJsr.DungeonsGame.Screens;
 
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Tools.WorldContactListener;
+import io.FaiscaJsr.DungeonsGame.entities.BspTree;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
-import io.FaiscaJsr.DungeonsGame.entities.TileMap.Map;
-import io.FaiscaJsr.DungeonsGame.entities.TileMap.Room;
+import io.FaiscaJsr.DungeonsGame.entities.VirtualJoystick;
 import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
 
 public class PlayScreen implements Screen {
@@ -24,14 +28,14 @@ public class PlayScreen implements Screen {
 	Texture texture;
 	private OrthographicCamera camera;
 	private Viewport viewport;
-	private Map map;
 	public static World world;
 	private Box2DDebugRenderer debugRenderer;
 	private Player player;
-	private int PPM = 5;
+	public static int PPM = 5;
 	private TextureAtlas textureAtlas;
-
-	
+	public VirtualJoystick virtualJoystick;
+	private Stage stage;
+	private BspTree tree;
 
 	public TextureAtlas getTextureAtlas() {
 		return textureAtlas;
@@ -40,53 +44,59 @@ public class PlayScreen implements Screen {
 	public PlayScreen(Main game) {
 		super();
 		this.game = game;
-		world = new World(new Vector2(0, 0), true);
-		textureAtlas = new TextureAtlas("player/Player.atlas");
+		Box2D.init();
 		camera = new OrthographicCamera();
-		viewport = new FitViewport(1920/PPM, 1080/PPM, camera); 
-		map = new Map();
+		viewport = new FitViewport(1920 / PPM, 1080 / PPM, camera);
+		stage = new Stage(viewport);
+		world = new World(new Vector2(0, 0), true);
+		world.setContactListener(new WorldContactListener());
+		textureAtlas = new TextureAtlas("player/player2.atlas");
 		debugRenderer = new Box2DDebugRenderer();
-		player = new Player(world,this);
+		virtualJoystick = new VirtualJoystick(0, 0, 20, 10);
+
+		player = new Player(world, this, virtualJoystick);
+		BspTree bspTree = new BspTree(new Rectangle(0, 0, 2500 / Tile.DIM, 2500 / Tile.DIM), player);
+		tree = bspTree.Split(5, bspTree.container);
+		tree.load(tree);
+		BspTree.rooms.get(0).playerSpawn = true;
+		player.body.setTransform(new Vector2(BspTree.rooms.get(0).center.x, BspTree.rooms.get(0).center.y), 0);
 	}
 
 	@Override
 	public void show() {
-
 	}
 
 	@Override
 	public void render(float delta) {
-		
-		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
 		game.batch.begin();
-		map.createRooms(game.batch);
+		tree.draw(game.batch);
 		camera.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
 		player.draw(game.batch);
 		game.batch.end();
+		virtualJoystick.render();
 		update(delta);
 	}
-	
+
 	public void update(float delta) {
-		
 		HandleInput(delta);
 		world.step(1 / 60f, 6, 2);
 		player.update(delta);
-		game.batch.setProjectionMatrix(camera.combined);
+		game.batch.setProjectionMatrix(stage.getCamera().combined);
 		camera.update();
-		debugRenderer.render(world, camera.combined);
-
+		debugRenderer.render(world, stage.getCamera().combined);
 	}
 
 	public void HandleInput(float delta) {
-		player.HandleInput();
+		player.HandleInput(delta);
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		viewport.update(width, height);
-
+		virtualJoystick.resize(width, height);
 	}
 
 	@Override
@@ -106,7 +116,11 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-
+        player.dispose();
+        virtualJoystick.dispose();
+        textureAtlas.dispose();
+        debugRenderer.dispose();
+        world.dispose();
 	}
 
 }
