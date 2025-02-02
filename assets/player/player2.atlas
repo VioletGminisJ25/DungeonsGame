@@ -1,0 +1,17 @@
+player2.png
+size:512,512
+repeat:none
+attack
+bounds:2,162,126,312
+charge
+bounds:2,4,126,156
+death
+bounds:258,279,126,195
+hit
+bounds:130,82,126,78
+idle
+bounds:258,82,126,195
+run
+bounds:130,162,126,312
+transition to charge
+bounds:130,2,126,78

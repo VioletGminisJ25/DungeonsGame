@@ -1,0 +1,147 @@
+package io.FaiscaJsr.DungeonsGame.entities.TileMap;
+
+import java.util.ArrayList;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import io.FaiscaJsr.DungeonsGame.entities.Map;
+
+public class Corridor {
+	private float origin;
+	private float destination;
+	private float pivot;
+	private boolean horizontal;
+
+	private ArrayList<Floor> floors;
+	private ArrayList<Wall> walls;
+	private ArrayList<Corner> corners;
+	private final int WIDTH = 3;
+	private int HEIGHT;
+	Map map;
+
+	// public enum GridSpace {
+	// empty, floor, wall
+	// }
+
+	// public GridSpace[][] grid;
+
+	public Corridor(int origin, int destination, int pivot, boolean horizontal) {
+		super();
+		this.origin = origin;
+		this.destination = destination;
+		this.pivot = pivot;
+		this.horizontal = horizontal;
+		this.map = map;
+		HEIGHT = Math.abs(destination - origin);
+		floors = new ArrayList<Floor>();
+		walls = new ArrayList<Wall>();
+		corners = new ArrayList<Corner>();
+	}
+
+	public void load() {
+
+		// grid = new GridSpace[WIDTH][HEIGHT];
+		// for (int i = 0; i < grid.length; i++) {
+		// for (int j = 0; j < grid[i].length; j++) {
+		// if (i == 0|| i == grid.length - 1) {
+		// grid[i][j] = GridSpace.wall;
+		// } else {
+		// grid[i][j] = GridSpace.floor;
+		// }
+
+		// }
+		// }
+
+		for (float x = Math.min(origin, destination); x <= Math.max(origin, destination); x += Tile.DIM) {
+			boolean collide = false;
+			Floor floor;
+
+			if (horizontal) {
+				floor = new Floor(x, pivot, 0); // Ajuste de posición
+
+			} else {
+				floor = new Floor(pivot, x, 0); // Ajuste de posición
+
+			}
+			// for (Room room : map.rooms) {
+			// 	int count=0;
+			// 	for (Wall wall : room.walls) {
+			// 		count++;
+			// 		if (wall.collidesWith(floor)) {
+			// 			if(count==1){
+			// 				collide = false;
+			// 			}
+			// 			walls.remove(wall);
+			// 			collide = true;
+			// 		}
+			// 	}
+			// 	// for (Corner corner : room.corners) {
+			// 	// 	count++;
+			// 	// 	if (corner.collidesWith(floor)) {
+			// 	// 		if(count==1){
+			// 	// 			collide = false;
+			// 	// 		}
+			// 	// 		collide = true;
+			// 	// 	}
+			// 	// }
+			// 	// for (Floor floor1 : room.floors) {
+			// 	// 	if (floor1.collidesWith(floor)) {
+			// 	// 		collide = true;
+			// 	// 	}
+			// 	// }
+			// }
+			floors.add(floor);
+
+				// if (horizontal) {
+				// 	Wall wall1 = new Wall(x, pivot - Tile.DIM, 0);
+				// 	Wall wall2 = new Wall(x, pivot + Tile.DIM, 0);
+				// 	walls.add(wall1);
+				// 	walls.add(wall2);
+				// } else {
+				// 	Wall wall1 = new Wall(pivot - Tile.DIM, x, -90);
+				// 	Wall wall2 = new Wall(pivot + Tile.DIM, x, 90);
+				// 	walls.add(wall1);
+				// 	walls.add(wall2);
+				// }
+
+			// floors.add(floor);
+		}
+
+		// grid = new GridSpace[HEIGHT][WIDTH];
+		// for (int i = 0; i < grid.length; i++) {
+		// for (int j = 0; j < grid[i].length; j++) {
+		// if (j == 0|| j == grid[i].length - 1) {
+		// grid[i][j] = GridSpace.wall;
+		// } else {
+		// grid[i][j] = GridSpace.floor;
+		// }
+
+		// }
+		// }
+
+		// for (int i = 0; i < grid.length; i++) {
+		// for (int j = 0; j < grid[i].length; j++) {
+		// if (grid[i][j] == GridSpace.wall) {
+		// Wall wall = new Wall(origin + (i * 32), pivot + (j * 32), 0);
+		// walls.add(wall);
+		// }
+		// if (grid[i][j] == GridSpace.floor) {
+		// Floor floor = new Floor(origin + (i * 32), pivot + (j * 32), 1);
+		// floors.add(floor);
+		// }
+		// }
+		// }
+	}
+
+	public void draw(SpriteBatch batch) {
+		// for (Wall wall : walls) {
+		// 	// batch.draw(wall.getSprite(), wall.position.x, wall.position.y);
+		// 	wall.getSprite().draw(batch);
+		// }
+		for (Floor floor : floors) {
+			batch.draw(floor.getSprite(), floor.position.x, floor.position.y);
+			// floor.getSprite().draw(batch);
+		}
+
+	}
+}

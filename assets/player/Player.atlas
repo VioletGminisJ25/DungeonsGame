@@ -1,0 +1,11 @@
+Player.png
+size:2048,256
+repeat:none
+attack
+bounds:2,104,1000,100
+idle
+bounds:604,2,300,100
+run
+bounds:2,2,600,100
+up
+bounds:1004,104,400,100
