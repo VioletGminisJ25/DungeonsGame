@@ -55,7 +55,7 @@ public class PlayScreen implements Screen {
 		virtualJoystick = new VirtualJoystick(0, 0, 20, 10);
 
 		player = new Player(world, this, virtualJoystick);
-		BspTree bspTree = new BspTree(new Rectangle(0, 0, 2500 / Tile.DIM, 2500 / Tile.DIM), player);
+		BspTree bspTree = new BspTree(new Rectangle(0, 0, 3000 / Tile.DIM, 3000 / Tile.DIM), player);
 		tree = bspTree.Split(5, bspTree.container);
 		tree.load(tree);
 		BspTree.rooms.get(0).playerSpawn = true;
