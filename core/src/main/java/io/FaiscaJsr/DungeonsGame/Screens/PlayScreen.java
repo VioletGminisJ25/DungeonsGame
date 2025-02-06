@@ -20,22 +20,31 @@ import io.FaiscaJsr.DungeonsGame.Main;
 import io.FaiscaJsr.DungeonsGame.Entities.BspTree;
 import io.FaiscaJsr.DungeonsGame.Entities.Player;
 import io.FaiscaJsr.DungeonsGame.Entities.VirtualJoystick;
+import io.FaiscaJsr.DungeonsGame.Entities.Bosses.SlimeKing;
 import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Tile;
 import io.FaiscaJsr.DungeonsGame.Tools.WorldContactListener;
 
 public class PlayScreen implements Screen {
+
+	public static final short PLAYER_BIT_MASK = 1;
+	public static final short ENEMY_BIT_MASK = 2;
+	public static final short GOAL_BIT_MASK = 4;
+	public static final short WALL_BIT_MASK = 8;
+	public static final short ITEM_BIT_MASK = 16;
+
 	private Main game;
 	Texture texture;
 	private OrthographicCamera camera;
 	private Viewport viewport;
 	public static World world;
 	private Box2DDebugRenderer debugRenderer;
-	private Player player;
+	public Player player;
 	public static int PPM = 5;
 	private TextureAtlas textureAtlas;
 	public VirtualJoystick virtualJoystick;
 	private Stage stage;
 	private BspTree tree;
+	private  SlimeKing slimeKing;
 
 	public TextureAtlas getTextureAtlas() {
 		return textureAtlas;
@@ -52,13 +61,15 @@ public class PlayScreen implements Screen {
 		world.setContactListener(new WorldContactListener());
 		textureAtlas = new TextureAtlas("player/player2.atlas");
 		debugRenderer = new Box2DDebugRenderer();
-		virtualJoystick = new VirtualJoystick(0, 0, 20, 10);
-
+		virtualJoystick = new VirtualJoystick(0, 0, 20, 12);
 		player = new Player(world, this, virtualJoystick);
+		virtualJoystick.setPlayer(player);
+
 		BspTree bspTree = new BspTree(new Rectangle(0, 0, 3000 / Tile.DIM, 3000 / Tile.DIM), player);
 		tree = bspTree.Split(5, bspTree.container);
 		tree.load(tree);
 		BspTree.rooms.get(0).playerSpawn = true;
+		slimeKing = new SlimeKing(player,this,world, BspTree.rooms.get(0).center.x, BspTree.rooms.get(0).center.y, 100, 1, 1);
 		player.body.setTransform(new Vector2(BspTree.rooms.get(0).center.x, BspTree.rooms.get(0).center.y), 0);
 	}
 
@@ -74,6 +85,7 @@ public class PlayScreen implements Screen {
 		game.batch.begin();
 		tree.draw(game.batch);
 		camera.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
+		slimeKing.draw(game.batch);
 		player.draw(game.batch);
 		game.batch.end();
 		virtualJoystick.render();
@@ -86,7 +98,8 @@ public class PlayScreen implements Screen {
 		player.update(delta);
 		game.batch.setProjectionMatrix(stage.getCamera().combined);
 		camera.update();
-		debugRenderer.render(world, stage.getCamera().combined);
+		// debugRenderer.render(world, stage.getCamera().combined);
+		slimeKing.update(delta);
 	}
 
 	public void HandleInput(float delta) {
@@ -116,11 +129,11 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-        player.dispose();
-        virtualJoystick.dispose();
-        textureAtlas.dispose();
-        debugRenderer.dispose();
-        world.dispose();
+		player.dispose();
+		virtualJoystick.dispose();
+		textureAtlas.dispose();
+		debugRenderer.dispose();
+		world.dispose();
 	}
 
 }

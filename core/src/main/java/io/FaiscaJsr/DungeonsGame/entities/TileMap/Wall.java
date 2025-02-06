@@ -29,6 +29,7 @@ public class Wall extends Tile {
         PolygonShape wallShape = new PolygonShape();
         wallShape.setAsBox(Tile.DIM / 2, Tile.DIM / 2);
         wallBodyDef.shape = wallShape;
+        wallBodyDef.filter.categoryBits = PlayScreen.WALL_BIT_MASK;
         wallFixture = body.createFixture(wallBodyDef);
 
     }

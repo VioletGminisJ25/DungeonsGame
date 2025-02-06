@@ -32,9 +32,9 @@ public class Goal extends Tile{
 		PolygonShape wallShape = new PolygonShape();
 		wallShape.setAsBox(Tile.DIM , Tile.DIM/2);
 		goalBodyDef.shape = wallShape;
+        goalBodyDef.filter.categoryBits = PlayScreen.GOAL_BIT_MASK;
 		goalFixture = body.createFixture(goalBodyDef);
 		goalFixture.setUserData(this);
-
 	}
 
 	public void reachGoal(){
