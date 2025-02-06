@@ -70,18 +70,6 @@ public class BspTree {
 
 	public void load(BspTree node) {
 
-
-
-		// for(int i=(int)node.container.x; i < node.container.x + node.container.width;
-		// i++){
-		// for(int j= (int)node.container.y; j < node.container.y +
-		// node.container.height; j++){
-		// floors.add(new Floor(i, j,0));
-
-		// }
-		// }
-
-
 		if (node.left != null) {
 			 load(node.left);
 		}
@@ -100,19 +88,6 @@ public class BspTree {
 				numHabitaciones++;
 			}
 		}
-
-		// for(int i = (int)this.container.x; i < this.container.x +
-		// this.container.width; i++){
-		// for(int j = (int)this.container.y; j < this.container.y +
-		// this.container.height; j++){
-		// floors.add(new Floor(i, j,0));
-		// }
-		// }
-		corridors();
-	}
-
-	public void corridors() {
-
 	}
 
 	public void draw(SpriteBatch batch) {
