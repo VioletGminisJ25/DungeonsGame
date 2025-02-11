@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.FaiscaJsr.DungeonsGame.Entities.Room.Room;
 import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Floor;
 import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Tile;
+import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 
 public class BspTree {
 	public Rectangle container;
@@ -18,20 +19,21 @@ public class BspTree {
 	public BspTree right;
 	private static Random rnd = new Random();
 	private ArrayList<Floor> floors;
-	public static ArrayList<Room> rooms;
+	public static ArrayList<Room> rooms = new ArrayList<Room>();
 	private final static int MIN_ROOM_SIZE = 4;
     private Player player;
+    private PlayScreen playScreen;
 
-	public BspTree(Rectangle a ,Player player) {
+	public BspTree(Rectangle a ,Player player, PlayScreen playScreen) {
 		container = a;
 		System.out.println(container);
 		floors = new ArrayList<Floor>();
-		rooms = new ArrayList<Room>();
         this.player = player;
+        this.playScreen = playScreen;
 	}
 
 	public BspTree Split(int numberOfOperations, Rectangle container) {
-		BspTree node = new BspTree(container,player);
+		BspTree node = new BspTree(container,player,playScreen);
 
 		if (numberOfOperations == 0) {
 			return node;
@@ -81,7 +83,7 @@ public class BspTree {
 
 				System.out.println(node.container.x);
 				System.out.println(node.container.y);
-				Room room = new Room(numHabitaciones, new Vector2(node.container.x , node.container.y),(int) node.container.width,(int) node.container.height,player);
+				Room room = new Room(numHabitaciones, new Vector2(node.container.x , node.container.y),(int) node.container.width,(int) node.container.height,player,playScreen);
 				room.setup();
 				room.load();
 				rooms.add(room);

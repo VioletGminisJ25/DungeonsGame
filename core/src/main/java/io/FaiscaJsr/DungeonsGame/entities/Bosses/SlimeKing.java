@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.Array;
 import io.FaiscaJsr.DungeonsGame.Entities.Enemy;
 import io.FaiscaJsr.DungeonsGame.Entities.Player;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
-import io.FaiscaJsr.DungeonsGame.Tools.SlimeData;
 
 public class SlimeKing extends Enemy {
 	private World world;
@@ -81,26 +80,26 @@ public class SlimeKing extends Enemy {
 				break;
 			case dead:
 				region = dead.getKeyFrame(stateTimer);
-                
-                if (dead.isAnimationFinished(stateTimer)) {
-                    enemyDead = true;
-                }
+
+				if (dead.isAnimationFinished(stateTimer)) {
+					enemyDead = true;
+				}
 				break;
 
 			default:
 				region = wander.getKeyFrame(stateTimer, true);
 				break;
 		}
-        if(!enemyDead){
+		if(!enemyDead){
 
-            if ((body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
-                region.flip(true, false);
-                runningRight = false;
-            } else if ((body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
-                region.flip(true, false);
-                runningRight = true;
-            }
-        }
+			if ((body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
+				region.flip(true, false);
+				runningRight = false;
+			} else if ((body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
+				region.flip(true, false);
+				runningRight = true;
+			}
+		}
 		stateTimer = currentState == previousState ? stateTimer + delta : 0;
 		previousState = currentState;
 		return region;
@@ -128,19 +127,19 @@ public class SlimeKing extends Enemy {
 		setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2 + 2);
 		changeState(dt);
 		setRegion(getFrame(dt));
-        if(getCurrentHealth() <= 0){
-            isDead = true;
-        }
+		if(getCurrentHealth() <= 0){
+			isDead = true;
+		}
 	}
 
 	public void changeState(float dt) {
 		if (screen.player.body.getPosition().dst(body.getPosition()) > 100) {
 			body.setLinearVelocity(
-					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(5000).scl(dt)));
+					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(3000).scl(dt)));
 		} else if (screen.player.body.getPosition().dst(body.getPosition()) <= 100
 				&& screen.player.body.getPosition().dst(body.getPosition()) >= 40) {
 			body.setLinearVelocity(
-					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(2000).scl(dt)));
+					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(1000).scl(dt)));
 		} else {
 			body.setLinearVelocity(new Vector2(0, 0));
 		}
@@ -156,7 +155,7 @@ public class SlimeKing extends Enemy {
 
 		FixtureDef fixtureDef = new FixtureDef();
 		CircleShape shape = new CircleShape();
-		shape.setRadius(16);
+		shape.setRadius(20);
 		fixtureDef.shape = shape;
 		body.createFixture(fixtureDef);
 		shape.dispose();
@@ -169,10 +168,9 @@ public class SlimeKing extends Enemy {
 		// new Vector2(100 / PlayScreen.PPM, -100 / PlayScreen.PPM)
 		// });
 		fixtureDef.shape = edgeShape;
-		fixtureDef.isSensor = true;
 		fixtureDef.filter.categoryBits = PlayScreen.ENEMY_BIT_MASK;
-		fixtureDef.filter.maskBits = PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK | PlayScreen.WALL_BIT_MASK;
-		body.createFixture(fixtureDef).setUserData(new SlimeData(this, "damage"));
+		fixtureDef.filter.maskBits = PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK | PlayScreen.WALL_BIT_MASK | PlayScreen.ENEMY_BIT_MASK ;
+		body.createFixture(fixtureDef).setUserData(this);
 		edgeShape.dispose();
 	}
 

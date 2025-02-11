@@ -17,11 +17,10 @@ public class Goal extends Tile{
 	private BodyDef bodyDef;
 	public Fixture goalFixture;
 	private Player player;
-	private int RoomCount;
+	private static int RoomCount = 0;
 	public Goal(float x, float y,int rotation,Player player) {
 		super(x, y, ResourceLoader.goalTile(rotation));
         this.player = player;
-        this.RoomCount = 1;
 		 bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.StaticBody;
 		bodyDef.position.set(x +(Tile.DIM), y + (Tile.DIM/2));

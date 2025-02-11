@@ -48,7 +48,7 @@ public class Player extends Sprite implements Disposable {
 		setRegion(idleRegion);
 		setBounds(0, 0, 126 * 1.1f, 39 * 1.1f);
 		definePlayer();
-		setCenter(getWidth() / 2, getHeight() / 2);
+		setCenter(126 * 1.1f/2, 39 * 1.1f/2);
 
 		currentState = State.idle;
 		previousState = State.idle;
@@ -131,26 +131,20 @@ public class Player extends Sprite implements Disposable {
 		body = world.createBody(bodyDef);
 
 		FixtureDef fixtureDef = new FixtureDef();
-		CircleShape shape = new CircleShape();
-		shape.setRadius(5);
-		fixtureDef.shape = shape;
-		body.createFixture(fixtureDef);
-		shape.dispose();
 		PolygonShape edgeShape = new PolygonShape();
 		edgeShape.set(new Vector2[] {
-				new Vector2(-20 / PlayScreen.PPM, 31 / PlayScreen.PPM),
-				new Vector2(20 / PlayScreen.PPM, 31 / PlayScreen.PPM),
-				new Vector2(-20 / PlayScreen.PPM, -11 / PlayScreen.PPM),
-				new Vector2(20 / PlayScreen.PPM, -11 / PlayScreen.PPM)
+				new Vector2(-40 / PlayScreen.PPM, 60 / PlayScreen.PPM),
+				new Vector2(40 / PlayScreen.PPM, 60 / PlayScreen.PPM),
+				new Vector2(-40 / PlayScreen.PPM, -20 / PlayScreen.PPM),
+				new Vector2(40 / PlayScreen.PPM, -20 / PlayScreen.PPM)
 		});
 		fixtureDef.shape = edgeShape;
-		fixtureDef.isSensor = true;
 		fixtureDef.filter.categoryBits = PlayScreen.PLAYER_BIT_MASK;
 
 		fixtureDef.filter.maskBits = PlayScreen.WALL_BIT_MASK |
 				PlayScreen.GOAL_BIT_MASK | PlayScreen.ENEMY_BIT_MASK | PlayScreen.ITEM_BIT_MASK;
 
-		body.createFixture(fixtureDef).setUserData("player");
+		body.createFixture(fixtureDef).setUserData(this);
 		edgeShape.dispose();
 	}
 
@@ -165,7 +159,7 @@ public class Player extends Sprite implements Disposable {
 	}
 
 	public void update(float delta) {
-		setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight());
+		setPosition(body.getPosition().x - getWidth() / 2+3, body.getPosition().y - getHeight());
 		setRegion(getFrame(delta));
         if (isattack && attack.isAnimationFinished(stateTimer)) {
             isattack = false;
@@ -198,10 +192,9 @@ public class Player extends Sprite implements Disposable {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(body.getPosition().x, body.getPosition().y);
         bodyDef.linearDamping = 0f;
-
         bodyAttack = world.createBody(bodyDef);
-
         FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.density = 10000f;
         PolygonShape attackShape = new PolygonShape();
 
         if (!runningRight) {
@@ -223,13 +216,11 @@ public class Player extends Sprite implements Disposable {
         fixtureDef.shape = attackShape;
         fixtureDef.isSensor = true;
         fixtureDef.filter.categoryBits = PlayScreen.PLAYER_BIT_MASK;
-        fixtureDef.filter.maskBits = PlayScreen.WALL_BIT_MASK |
-                PlayScreen.GOAL_BIT_MASK |
-                PlayScreen.ENEMY_BIT_MASK |
-                PlayScreen.ITEM_BIT_MASK;
+        fixtureDef.filter.maskBits = (PlayScreen.ENEMY_BIT_MASK |
+                PlayScreen.ITEM_BIT_MASK);
 
         Fixture attackFixture = bodyAttack.createFixture(fixtureDef);
-        attackFixture.setUserData(new PlayerData("playerattackLeft", 20, this, isattack));
+        attackFixture.setUserData(this);
 
         attackShape.dispose();
     }
