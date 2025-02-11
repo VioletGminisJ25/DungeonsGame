@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.Entities;
+package io.FaiscaJsr.DungeonsGame.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

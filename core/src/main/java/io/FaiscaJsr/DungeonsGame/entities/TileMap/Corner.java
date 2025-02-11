@@ -1,5 +1,5 @@
 
-package io.FaiscaJsr.DungeonsGame.Entities.TileMap;
+package io.FaiscaJsr.DungeonsGame.entities.TileMap;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;

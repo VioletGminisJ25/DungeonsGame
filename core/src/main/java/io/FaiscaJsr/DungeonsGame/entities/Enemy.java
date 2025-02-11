@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.Entities;
+package io.FaiscaJsr.DungeonsGame.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-
-import io.FaiscaJsr.DungeonsGame.Entities.Room.Room;
 
 public abstract class Enemy extends Sprite implements Disposable {
 
@@ -23,8 +21,8 @@ public abstract class Enemy extends Sprite implements Disposable {
     public static ArrayList<Enemy> enemiesToHit = new ArrayList<Enemy>();
     private Player player;
     protected boolean destroyed;
-    protected boolean enemyDead;
-    private float cooldownDamage = 3f;
+    public boolean enemyDead;
+    private float cooldownDamage = 0f;
 
     public float getCooldownDamage() {
         return cooldownDamage;
@@ -87,27 +85,7 @@ public abstract class Enemy extends Sprite implements Disposable {
     public static List<Enemy> enemiesToRemove = new ArrayList<>();
 
     public void update(float delta) {
-        if (!enemiesToHit.isEmpty()) {
-            // System.out.println("Enemies to hit: " + enemiesToHit.size());
 
-            for (Enemy enemy : new ArrayList<>(enemiesToHit)) {
-                if (player.isattack) {
-                    if (enemy.getCurrentHealth() > 0) {
-                        enemy.hit(20, delta);
-                    } else {
-                        enemyDead = true;
-                        enemiesToRemove.add(enemy);
-                    }
-                }
-            }
-        }
-        for (Enemy enemy : enemiesToRemove) {
-            enemiesToHit.remove(enemy);
-            if (enemy.body != null) {
-                world.destroyBody(enemy.body);
-            }
-        }
-        enemiesToRemove.clear();
         // // if (!enemiesToHit.isEmpty()) {
 
         // List<Enemy> toRemove = new ArrayList<>();
@@ -134,8 +112,6 @@ public abstract class Enemy extends Sprite implements Disposable {
         // }
     }
 
-
-
     public void draw(SpriteBatch batch) {
         if (!destroyed) {
             super.draw(batch);
@@ -145,12 +121,13 @@ public abstract class Enemy extends Sprite implements Disposable {
     public abstract void createBody(float x, float y);
 
     public void hit(int damage, float delta) {
-        cooldownDamage += delta;
-        if (cooldownDamage > .5f) {
-            cooldownDamage = 0;
-            currentHealth = currentHealth - damage;
-            System.out.println(currentHealth);
-        }
-    }
 
+        System.out.println("Entro");
+        cooldownDamage += delta;
+
+        currentHealth = currentHealth - damage;
+        System.out.println(currentHealth);
+       
+
+    }
 }

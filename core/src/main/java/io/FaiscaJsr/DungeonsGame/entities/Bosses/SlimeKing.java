@@ -1,9 +1,7 @@
-package io.FaiscaJsr.DungeonsGame.Entities.Bosses;
+package io.FaiscaJsr.DungeonsGame.entities.Bosses;
 
 import java.util.Random;
 
-import com.badlogic.gdx.Audio;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,9 +14,9 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
-import io.FaiscaJsr.DungeonsGame.Entities.Enemy;
-import io.FaiscaJsr.DungeonsGame.Entities.Player;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
+import io.FaiscaJsr.DungeonsGame.entities.Enemy;
+import io.FaiscaJsr.DungeonsGame.entities.Player;
 
 public class SlimeKing extends Enemy {
 	private World world;
@@ -169,7 +167,7 @@ public class SlimeKing extends Enemy {
 		// });
 		fixtureDef.shape = edgeShape;
 		fixtureDef.filter.categoryBits = PlayScreen.ENEMY_BIT_MASK;
-		fixtureDef.filter.maskBits = PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK | PlayScreen.WALL_BIT_MASK | PlayScreen.ENEMY_BIT_MASK ;
+		fixtureDef.filter.maskBits = PlayScreen.ATTCK_BIT_MASK | PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK | PlayScreen.WALL_BIT_MASK | PlayScreen.ENEMY_BIT_MASK ;
 		body.createFixture(fixtureDef).setUserData(this);
 		edgeShape.dispose();
 	}

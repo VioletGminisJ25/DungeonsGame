@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.Entities;
+package io.FaiscaJsr.DungeonsGame.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 import io.FaiscaJsr.DungeonsGame.ResourceLoader;
-import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Tile;
+import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 
 public class Goal extends Tile{

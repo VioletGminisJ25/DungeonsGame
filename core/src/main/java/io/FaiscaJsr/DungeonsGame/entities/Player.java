@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.Entities;
+package io.FaiscaJsr.DungeonsGame.entities;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
-import io.FaiscaJsr.DungeonsGame.Tools.PlayerData;
 
 public class Player extends Sprite implements Disposable {
 	public enum State {
@@ -34,7 +32,7 @@ public class Player extends Sprite implements Disposable {
 	public float stateTimer;
 	public VirtualJoystick virtualJoystick;
 	public boolean isattack = false;
-    private Body bodyAttack;
+	private Body bodyAttack;
 
 	public boolean isIsattack() {
 		return isattack;
@@ -48,7 +46,7 @@ public class Player extends Sprite implements Disposable {
 		setRegion(idleRegion);
 		setBounds(0, 0, 126 * 1.1f, 39 * 1.1f);
 		definePlayer();
-		setCenter(126 * 1.1f/2, 39 * 1.1f/2);
+		setCenter(126 * 1.1f / 2, 39 * 1.1f / 2);
 
 		currentState = State.idle;
 		previousState = State.idle;
@@ -90,13 +88,8 @@ public class Player extends Sprite implements Disposable {
 				region = run.getKeyFrame(stateTimer, true);
 				break;
 			case attack:
-                    region = attack.getKeyFrame(stateTimer);
-				if (attack.isAnimationFinished(stateTimer)) {
-                    // world.destroyBody(bodyAttack);
-					isattack = false;
-				}
+				region = attack.getKeyFrame(stateTimer);
 				break;
-			// hola
 			default:
 				region = idle.getKeyFrame(stateTimer, true);
 				break;
@@ -159,15 +152,15 @@ public class Player extends Sprite implements Disposable {
 	}
 
 	public void update(float delta) {
-		setPosition(body.getPosition().x - getWidth() / 2+3, body.getPosition().y - getHeight());
+		setPosition(body.getPosition().x - getWidth() / 2 + 3, body.getPosition().y - getHeight());
 		setRegion(getFrame(delta));
-        if (isattack && attack.isAnimationFinished(stateTimer)) {
-            isattack = false;
-            if (bodyAttack != null) {
-                world.destroyBody(bodyAttack);
-                bodyAttack = null;
-            }
-        }
+		if (isattack && attack.isAnimationFinished(stateTimer)) {
+			isattack = false;
+			if (bodyAttack != null) {
+				world.destroyBody(bodyAttack);
+				bodyAttack = null;
+			}
+		}
 
 	}
 
@@ -177,53 +170,53 @@ public class Player extends Sprite implements Disposable {
 	}
 
 	public void attack() {
-        if (!isattack) {
-            isattack = true;
-            createAttackBody();
-        }
-    }
+		if (!isattack) {
+			isattack = true;
+			createAttackBody();
+		}
+	}
 
-    private void createAttackBody() {
-        if (bodyAttack != null) {
-            world.destroyBody(bodyAttack);
-        }
+	private void createAttackBody() {
+		if (bodyAttack != null) {
+			world.destroyBody(bodyAttack);
+		}
 
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(body.getPosition().x, body.getPosition().y);
-        bodyDef.linearDamping = 0f;
-        bodyAttack = world.createBody(bodyDef);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 10000f;
-        PolygonShape attackShape = new PolygonShape();
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.DynamicBody;
+		bodyDef.position.set(body.getPosition().x, body.getPosition().y);
+		bodyDef.linearDamping = 0f;
+		bodyAttack = world.createBody(bodyDef);
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.density = 10000f;
+		PolygonShape attackShape = new PolygonShape();
 
-        if (!runningRight) {
-            attackShape.set(new Vector2[] {
-                    new Vector2(-31 / PlayScreen.PPM, 50 / PlayScreen.PPM),
-                    new Vector2(-270 / PlayScreen.PPM, 50 / PlayScreen.PPM),
-                    new Vector2(-31 / PlayScreen.PPM, -20 / PlayScreen.PPM),
-                    new Vector2(-270 / PlayScreen.PPM, -20 / PlayScreen.PPM)
-            });
-        } else {
-            attackShape.set(new Vector2[] {
-                    new Vector2(31 / PlayScreen.PPM, 50 / PlayScreen.PPM),
-                    new Vector2(270 / PlayScreen.PPM, 50 / PlayScreen.PPM),
-                    new Vector2(31 / PlayScreen.PPM, -20 / PlayScreen.PPM),
-                    new Vector2(270 / PlayScreen.PPM, -20 / PlayScreen.PPM)
-            });
-        }
+		if (!runningRight) {
+			attackShape.set(new Vector2[] {
+					new Vector2(-31 / PlayScreen.PPM, 50 / PlayScreen.PPM),
+					new Vector2(-270 / PlayScreen.PPM, 50 / PlayScreen.PPM),
+					new Vector2(-31 / PlayScreen.PPM, -20 / PlayScreen.PPM),
+					new Vector2(-270 / PlayScreen.PPM, -20 / PlayScreen.PPM)
+			});
+		} else {
+			attackShape.set(new Vector2[] {
+					new Vector2(31 / PlayScreen.PPM, 50 / PlayScreen.PPM),
+					new Vector2(270 / PlayScreen.PPM, 50 / PlayScreen.PPM),
+					new Vector2(31 / PlayScreen.PPM, -20 / PlayScreen.PPM),
+					new Vector2(270 / PlayScreen.PPM, -20 / PlayScreen.PPM)
+			});
+		}
 
-        fixtureDef.shape = attackShape;
-        fixtureDef.isSensor = true;
-        fixtureDef.filter.categoryBits = PlayScreen.PLAYER_BIT_MASK;
-        fixtureDef.filter.maskBits = (PlayScreen.ENEMY_BIT_MASK |
-                PlayScreen.ITEM_BIT_MASK);
+		fixtureDef.shape = attackShape;
+		fixtureDef.isSensor = true;
+		fixtureDef.filter.categoryBits = PlayScreen.ATTCK_BIT_MASK; //??  attack
+		fixtureDef.filter.maskBits = (PlayScreen.ENEMY_BIT_MASK |
+				PlayScreen.ITEM_BIT_MASK);
 
-        Fixture attackFixture = bodyAttack.createFixture(fixtureDef);
-        attackFixture.setUserData(this);
+		Fixture attackFixture = bodyAttack.createFixture(fixtureDef);
+		attackFixture.setUserData(this);
 
-        attackShape.dispose();
-    }
+		attackShape.dispose();
+	}
 
 	@Override
 	public void dispose() {

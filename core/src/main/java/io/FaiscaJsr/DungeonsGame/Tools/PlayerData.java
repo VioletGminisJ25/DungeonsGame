@@ -1,6 +1,6 @@
 package io.FaiscaJsr.DungeonsGame.Tools;
 
-import io.FaiscaJsr.DungeonsGame.Entities.Player;
+import io.FaiscaJsr.DungeonsGame.entities.Player;
 
 public class PlayerData {
     private  String mode;

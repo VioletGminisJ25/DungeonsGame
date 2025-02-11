@@ -16,15 +16,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
-import io.FaiscaJsr.DungeonsGame.Entities.BspTree;
-import io.FaiscaJsr.DungeonsGame.Entities.Enemy;
-import io.FaiscaJsr.DungeonsGame.Entities.Player;
-import io.FaiscaJsr.DungeonsGame.Entities.Slimes;
-import io.FaiscaJsr.DungeonsGame.Entities.VirtualJoystick;
-import io.FaiscaJsr.DungeonsGame.Entities.Bosses.SlimeKing;
-import io.FaiscaJsr.DungeonsGame.Entities.Room.Room;
-import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Tile;
 import io.FaiscaJsr.DungeonsGame.Tools.WorldContactListener;
+import io.FaiscaJsr.DungeonsGame.entities.BspTree;
+import io.FaiscaJsr.DungeonsGame.entities.Enemy;
+import io.FaiscaJsr.DungeonsGame.entities.Player;
+import io.FaiscaJsr.DungeonsGame.entities.VirtualJoystick;
+import io.FaiscaJsr.DungeonsGame.entities.Room.Room;
+import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
 
 public class PlayScreen implements Screen {
 
@@ -33,6 +31,7 @@ public class PlayScreen implements Screen {
     public static final short GOAL_BIT_MASK = 4;
     public static final short WALL_BIT_MASK = 8;
     public static final short ITEM_BIT_MASK = 16;
+    public static final short ATTCK_BIT_MASK = 32;
 
     private Main game;
     Texture texture;
@@ -56,7 +55,7 @@ public class PlayScreen implements Screen {
         this.game = game;
         Box2D.init();
         camera = new OrthographicCamera();
-        viewport = new FitViewport(1920/PPM , 1080/PPM, camera);
+        viewport = new FitViewport(1920 / PPM, 1080 / PPM, camera);
         stage = new Stage(viewport);
         world = new World(new Vector2(0, 0), true);
         world.setContactListener(new WorldContactListener());
@@ -79,51 +78,57 @@ public class PlayScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         game.batch.begin();
         tree.draw(game.batch);
         camera.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
-        // slimeKing.draw(game.batch);
-        // slimes.draw(game.batch);
         for (Enemy enemy : Room.enemies) {
-            if (enemy instanceof Slimes) {
-                ((Slimes) enemy).draw(game.batch);
-            }
-            if (enemy instanceof SlimeKing) {
-
-                ((SlimeKing) enemy).draw(game.batch);
-            }
-
-
+            enemy.draw(game.batch);
         }
         player.draw(game.batch);
         game.batch.end();
         virtualJoystick.render();
         update(delta);
     }
-
+    
     public void update(float delta) {
+
         HandleInput(delta);
         world.step(1 / 60f, 6, 2);
-        for (Enemy enemy : Room.enemies) {
-            if (enemy instanceof Slimes) {
-                ((Slimes) enemy).update(Gdx.graphics.getDeltaTime());
-            }
-            if (enemy instanceof SlimeKing){
+        for (Enemy enemy : Room.enemies) { // FIX: actualiza la lista de enemigos con cada enemigo = muerte instantanea
+                                           // al recibir daño
+            enemy.update(delta);
 
-
-                ((SlimeKing) enemy).update(Gdx.graphics.getDeltaTime());
-
-            }
         }
+
+        if (!Enemy.enemiesToHit.isEmpty()) {
+            // System.out.println("Enemies to hit: " + enemiesToHit.size());
+
+            for (Enemy enemy : Enemy.enemiesToHit) {
+                if (player.isattack) {
+                    if (enemy.getCurrentHealth() > 0) {
+                        enemy.hit(20, delta);
+                    } else {
+                        enemy.enemyDead = true;
+                        Enemy.enemiesToRemove.add(enemy);
+                    }
+                }
+            }
+            Enemy.enemiesToHit.clear();
+        }
+
+        for (Enemy enemy : Enemy.enemiesToRemove) {
+            world.destroyBody(enemy.body);
+        }
+        Enemy.enemiesToRemove.clear();
+
         player.update(delta);
         game.batch.setProjectionMatrix(stage.getCamera().combined);
         camera.update();
-        debugRenderer.render(world,stage.getCamera().combined);
+        debugRenderer.render(world, stage.getCamera().combined);
     }
-
-
 
     public void HandleInput(float delta) {
         player.HandleInput(delta);

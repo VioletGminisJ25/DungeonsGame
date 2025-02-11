@@ -1,23 +1,22 @@
-package io.FaiscaJsr.DungeonsGame.Entities.Room;
+package io.FaiscaJsr.DungeonsGame.entities.Room;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-import io.FaiscaJsr.DungeonsGame.Entities.Enemy;
-import io.FaiscaJsr.DungeonsGame.Entities.Goal;
-import io.FaiscaJsr.DungeonsGame.Entities.Player;
-import io.FaiscaJsr.DungeonsGame.Entities.Slimes;
-import io.FaiscaJsr.DungeonsGame.Entities.Bosses.SlimeKing;
-import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Corner;
-import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Floor;
-import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Tile;
-import io.FaiscaJsr.DungeonsGame.Entities.TileMap.Wall;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
+import io.FaiscaJsr.DungeonsGame.entities.Enemy;
+import io.FaiscaJsr.DungeonsGame.entities.Goal;
+import io.FaiscaJsr.DungeonsGame.entities.Player;
+import io.FaiscaJsr.DungeonsGame.entities.Slimes;
+import io.FaiscaJsr.DungeonsGame.entities.Bosses.SlimeKing;
+import io.FaiscaJsr.DungeonsGame.entities.TileMap.Corner;
+import io.FaiscaJsr.DungeonsGame.entities.TileMap.Floor;
+import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
+import io.FaiscaJsr.DungeonsGame.entities.TileMap.Wall;
 
 public class Room {
 

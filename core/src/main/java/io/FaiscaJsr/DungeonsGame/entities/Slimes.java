@@ -1,8 +1,7 @@
-package io.FaiscaJsr.DungeonsGame.Entities;
+package io.FaiscaJsr.DungeonsGame.entities;
 
 import java.util.Random;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -17,7 +16,7 @@ import com.badlogic.gdx.utils.Array;
 
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 
-public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA
+public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
 	private World world;
 	private Random random;
 
@@ -41,7 +40,7 @@ public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA
 	private Animation<TextureRegion> dead;
 	private Animation<TextureRegion> idle;
 	private Animation<TextureRegion> hit;
-	private Animation<TextureRegion> jump;
+	private Animation<TextureRegion> jump; //???
 
 
 	public Slimes(Player player, PlayScreen screen, World world, float x, float y, int maxHealth,
@@ -206,7 +205,7 @@ public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA
 		edgeShape.setAsBox(60 / PlayScreen.PPM, 60 / PlayScreen.PPM);
 		fixtureDef.shape = edgeShape;
 		fixtureDef.filter.categoryBits = PlayScreen.ENEMY_BIT_MASK;
-		fixtureDef.filter.maskBits = PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK | PlayScreen.WALL_BIT_MASK |PlayScreen.ENEMY_BIT_MASK;
+		fixtureDef.filter.maskBits = PlayScreen.ATTCK_BIT_MASK |PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK | PlayScreen.WALL_BIT_MASK |PlayScreen.ENEMY_BIT_MASK;
 		body.createFixture(fixtureDef).setUserData(this);
 		edgeShape.dispose();
 
