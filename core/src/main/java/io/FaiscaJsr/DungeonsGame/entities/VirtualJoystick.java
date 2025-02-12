@@ -1,12 +1,12 @@
 package io.FaiscaJsr.DungeonsGame.entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -19,19 +19,22 @@ public class VirtualJoystick {
 	private Texture baseTexture;
 	private Table table;
 	private Texture knobTexture;
-	private Vector2 basePosition;
-	private Vector2 knobPosition;
-	private float baseRadius;
-	private float knobRadius;
-	private boolean touched;
-	private int touchPointer;
 	private Touchpad touchpad;
-	private boolean isJoystickVisible = false;
+    private Texture upTexture;
+    private Texture downTexture;
+    private boolean jumpPressed;
+    public Image jumpImage;
+    private Player player;
 
-	public VirtualJoystick(float x, float y, float baseRadius, float knobRadius) {
+	public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public VirtualJoystick(float x, float y, float baseRadius, float knobRadius) {
 		stage = new Stage();
 		table = new Table();
-		table.bottom().left();
+        table.setFillParent(true);
+		table.bottom();
 		table.pad(15);
 
 		Skin skin = new Skin();
@@ -42,13 +45,38 @@ public class VirtualJoystick {
 		touchpadStyle.knob = skin.getDrawable("Joystick_knob");
 
 		touchpad = new Touchpad(10, touchpadStyle);
-		touchpad.setSize(40, 40);
-		table.add(touchpad);
+		touchpad.setSize(70, 70);
+		table.add(touchpad).pad(70).size(370, 370);
+        upTexture = new Texture("ui/ButtonAtack_34x34.png");
+		downTexture = new Texture("ui/ButtonAtack_pressed_34x34.png");
+		jumpImage = new Image(upTexture);
+		jumpImage.setSize(100, 100);
+		jumpImage.addListener(new InputListener() {
+
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				jumpPressed = true;
+				jumpImage.setDrawable(new Image(downTexture).getDrawable());
+                if(player!=null && !player.isIsattack()){
+                    player.attack();
+                }
+				return true;
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+				jumpPressed = false;
+				Gdx.app.postRunnable(() ->{
+                jumpImage.setDrawable(new Image(upTexture).getDrawable());
+            });
+
+			}
+
+		});
+		table.add().expandX().fillX();
+		table.add(jumpImage).size(touchpad.getWidth()+128, touchpad.getHeight()+128).pad(100);
 		stage.addActor(table);
 		Gdx.input.setInputProcessor(stage);
-
-
-
 	}
 
 	public Vector2 getDirection() {

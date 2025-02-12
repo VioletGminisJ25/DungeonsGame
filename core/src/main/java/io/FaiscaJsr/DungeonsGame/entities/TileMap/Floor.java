@@ -13,5 +13,5 @@ public class Floor extends Tile{
 		super(x,y,floor);
 		floor.setRotation(rotationDegrees);
 	}
-    
+
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import io.FaiscaJsr.DungeonsGame.entities.Room.Room;
 import io.FaiscaJsr.DungeonsGame.entities.TileMap.Floor;
 import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
+import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 
 public class BspTree {
 	public Rectangle container;
@@ -18,20 +19,21 @@ public class BspTree {
 	public BspTree right;
 	private static Random rnd = new Random();
 	private ArrayList<Floor> floors;
-	public static ArrayList<Room> rooms;
+	public static ArrayList<Room> rooms = new ArrayList<Room>();
 	private final static int MIN_ROOM_SIZE = 4;
     private Player player;
+    private PlayScreen playScreen;
 
-	public BspTree(Rectangle a ,Player player) {
+	public BspTree(Rectangle a ,Player player, PlayScreen playScreen) {
 		container = a;
 		System.out.println(container);
 		floors = new ArrayList<Floor>();
-		rooms = new ArrayList<Room>();
         this.player = player;
+        this.playScreen = playScreen;
 	}
 
 	public BspTree Split(int numberOfOperations, Rectangle container) {
-		BspTree node = new BspTree(container,player);
+		BspTree node = new BspTree(container,player,playScreen);
 
 		if (numberOfOperations == 0) {
 			return node;
@@ -70,18 +72,6 @@ public class BspTree {
 
 	public void load(BspTree node) {
 
-
-
-		// for(int i=(int)node.container.x; i < node.container.x + node.container.width;
-		// i++){
-		// for(int j= (int)node.container.y; j < node.container.y +
-		// node.container.height; j++){
-		// floors.add(new Floor(i, j,0));
-
-		// }
-		// }
-
-
 		if (node.left != null) {
 			 load(node.left);
 		}
@@ -93,26 +83,13 @@ public class BspTree {
 
 				System.out.println(node.container.x);
 				System.out.println(node.container.y);
-				Room room = new Room(numHabitaciones, new Vector2(node.container.x , node.container.y),(int) node.container.width,(int) node.container.height,player);
+				Room room = new Room(numHabitaciones, new Vector2(node.container.x , node.container.y),(int) node.container.width,(int) node.container.height,player,playScreen);
 				room.setup();
 				room.load();
 				rooms.add(room);
 				numHabitaciones++;
 			}
 		}
-
-		// for(int i = (int)this.container.x; i < this.container.x +
-		// this.container.width; i++){
-		// for(int j = (int)this.container.y; j < this.container.y +
-		// this.container.height; j++){
-		// floors.add(new Floor(i, j,0));
-		// }
-		// }
-		corridors();
-	}
-
-	public void corridors() {
-
 	}
 
 	public void draw(SpriteBatch batch) {

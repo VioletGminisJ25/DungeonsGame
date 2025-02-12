@@ -1,12 +1,10 @@
 package io.FaiscaJsr.DungeonsGame.entities.TileMap;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.utils.Disposable;
 
 import io.FaiscaJsr.DungeonsGame.ResourceLoader;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
@@ -29,6 +27,7 @@ public class Wall extends Tile {
         PolygonShape wallShape = new PolygonShape();
         wallShape.setAsBox(Tile.DIM / 2, Tile.DIM / 2);
         wallBodyDef.shape = wallShape;
+        wallBodyDef.filter.categoryBits = PlayScreen.WALL_BIT_MASK;
         wallFixture = body.createFixture(wallBodyDef);
 
     }
