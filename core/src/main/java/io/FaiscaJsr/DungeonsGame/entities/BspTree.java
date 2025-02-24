@@ -6,13 +6,14 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 
 import io.FaiscaJsr.DungeonsGame.entities.Room.Room;
 import io.FaiscaJsr.DungeonsGame.entities.TileMap.Floor;
 import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 
-public class BspTree {
+public class BspTree  {
 	public Rectangle container;
 	public Rectangle room;
 	public BspTree left;
@@ -20,16 +21,15 @@ public class BspTree {
 	private static Random rnd = new Random();
 	private ArrayList<Floor> floors;
 	public static ArrayList<Room> rooms = new ArrayList<Room>();
-	private final static int MIN_ROOM_SIZE = 4;
-    private Player player;
-    private PlayScreen playScreen;
+	private final static int MIN_ROOM_SIZE = 7;
+	private Player player;
+	private PlayScreen playScreen;
 
 	public BspTree(Rectangle a ,Player player, PlayScreen playScreen) {
 		container = a;
-		System.out.println(container);
 		floors = new ArrayList<Floor>();
-        this.player = player;
-        this.playScreen = playScreen;
+		this.player = player;
+		this.playScreen = playScreen;
 	}
 
 	public BspTree Split(int numberOfOperations, Rectangle container) {
@@ -42,11 +42,9 @@ public class BspTree {
 		Rectangle[] splitedContainer = SplitContainer(container);
 		// Console.WriteLine(numberOfOperations + "");
 		node.left = Split(numberOfOperations - 1, splitedContainer[0]);
-		System.out.println(numberOfOperations);
 
 		// Debug.Log(numberOfOperations);
 		node.right = Split(numberOfOperations - 1, splitedContainer[1]);
-		System.out.println(numberOfOperations);
 
 		return node;
 	}
@@ -81,23 +79,23 @@ public class BspTree {
 		}else{
 			if(node.container.width>MIN_ROOM_SIZE && node.container.height>MIN_ROOM_SIZE){
 
-				System.out.println(node.container.x);
-				System.out.println(node.container.y);
 				Room room = new Room(numHabitaciones, new Vector2(node.container.x , node.container.y),(int) node.container.width,(int) node.container.height,player,playScreen);
-				room.setup();
-				room.load();
 				rooms.add(room);
 				numHabitaciones++;
 			}
 		}
 	}
 
-	public void draw(SpriteBatch batch) {
-		for (Room room : rooms) {
+	public static void draw(SpriteBatch batch) {
+        for (Room room : rooms) {
 			room.draw(batch);
 		}
-		for (Floor floor : floors) {
-			batch.draw(floor.getSprite(), floor.position.x, floor.position.y);
-		}
+		// for (Floor floor : floors) {
+		// 	batch.draw(floor.getSprite(), floor.position.x, floor.position.y);
+		// }
+	}
+
+	public static void dispose() {
+		rooms.clear();
 	}
 }

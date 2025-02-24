@@ -1,7 +1,13 @@
 SlimeKing.png
-size:1024,2048
+size:2048,2048
 repeat:none
 death
-bounds:324,2,320,1280
+bounds:646,644,320,1280
+hit
+bounds:2,2,320,640
+obstacle
+bounds:2,644,320,1280
+obstacle_Death
+bounds:968,644,320,1280
 wander
-bounds:2,2,320,1280
+bounds:324,644,320,1280

@@ -7,8 +7,10 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
-import io.FaiscaJsr.DungeonsGame.entities.Enemy;
 import io.FaiscaJsr.DungeonsGame.entities.Goal;
+import io.FaiscaJsr.DungeonsGame.entities.Player;
+import io.FaiscaJsr.DungeonsGame.entities.ReverseGoal;
+import io.FaiscaJsr.DungeonsGame.entities.Enemies.Enemy;
 
 public class WorldContactListener implements ContactListener {
 
@@ -21,13 +23,15 @@ public class WorldContactListener implements ContactListener {
         // System.out.println("B:"+fixtureB.getFilterData().categoryBits);
         switch (sbit) {
             case PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK:
+            if (fixtureB.getUserData() != null) {
                 if (fixtureA.getFilterData().categoryBits == PlayScreen.PLAYER_BIT_MASK) {
-                    if (fixtureB.getUserData() != null) {
                         ((Goal) fixtureB.getUserData()).reachGoal();
+                    }else{
+                        ((Goal) fixtureA.getUserData()).reachGoal();
                     }
                 }
                 break;
-            case PlayScreen.ATTCK_BIT_MASK | PlayScreen.ENEMY_BIT_MASK: // Si el player choca con el enemigo deberia
+            case PlayScreen.ATTACK_BIT_MASK | PlayScreen.ENEMY_BIT_MASK: // Si el player choca con el enemigo deberia
                                                                          // recibir daño
                 Enemy enemy = null;
 
@@ -46,6 +50,28 @@ public class WorldContactListener implements ContactListener {
                     System.out.println(Enemy.enemiesToHit.size());
                 }
 
+                break;
+            case PlayScreen.PLAYER_BIT_MASK | PlayScreen.REVERSE_GOAL_BIT_MASK:
+            if (fixtureB.getUserData() != null) {
+                if (fixtureA.getFilterData().categoryBits == PlayScreen.PLAYER_BIT_MASK) {
+                        ((ReverseGoal) fixtureB.getUserData()).reachGoal();
+                    }else{
+                        ((ReverseGoal) fixtureA.getUserData()).reachGoal();
+                    }
+                }
+            break;
+
+            case PlayScreen.PLAYER_BIT_MASK | PlayScreen.ENEMY_BIT_MASK:
+            if (fixtureA.getUserData() != null && fixtureB.getUserData() !=null) {
+                if (fixtureB.getFilterData().categoryBits == PlayScreen.ENEMY_BIT_MASK) {
+                        ((Player) fixtureA.getUserData()).hit(5);
+                        ((Enemy)fixtureB.getUserData()).ishitPlayer = true;
+                    }else{
+                        ((Player) fixtureB.getUserData()).hit(5);
+                        ((Enemy) fixtureA.getUserData()).ishitPlayer = true;
+
+                    }
+                }
                 break;
 
                 // Y aqui el caso del ataque no me seas

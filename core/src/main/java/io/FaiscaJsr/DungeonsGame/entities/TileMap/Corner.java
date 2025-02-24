@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
-import io.FaiscaJsr.DungeonsGame.ResourceLoader;
+import io.FaiscaJsr.DungeonsGame.Managers.ResourceLoader;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 
 public class Corner extends Tile {

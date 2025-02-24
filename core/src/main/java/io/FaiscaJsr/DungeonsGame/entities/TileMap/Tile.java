@@ -10,7 +10,13 @@ public abstract class Tile extends Entity{
 	private Sprite sprite;
 
 
-	public Tile(float x, float y, Sprite sprite) {
+
+
+    public void setSprite(Sprite sprite) {
+        this.sprite = sprite;
+    }
+
+    public Tile(float x, float y, Sprite sprite) {
 		super(x, y, DIM, DIM);
 		this.sprite = sprite;
 		this.sprite.setPosition(x, y);

@@ -12,7 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 
-import io.FaiscaJsr.DungeonsGame.ResourceLoader;
+import io.FaiscaJsr.DungeonsGame.Managers.AssetsManager;
+import io.FaiscaJsr.DungeonsGame.Managers.ResourceLoader;
 
 public class VirtualJoystick {
 	private Stage stage;
@@ -38,8 +39,8 @@ public class VirtualJoystick {
 		table.pad(15);
 
 		Skin skin = new Skin();
-		skin.add("Joystick_base", ResourceLoader.baseJoysitck());
-		skin.add("Joystick_knob", ResourceLoader.knobJoystick());
+		skin.add("Joystick_base", AssetsManager.getTexture("img/joystick_base.png"));
+		skin.add("Joystick_knob",  AssetsManager.getTexture("img/joystick_knob.png"));
 		Touchpad.TouchpadStyle touchpadStyle = new TouchpadStyle();
 		touchpadStyle.background = skin.getDrawable("Joystick_base");
 		touchpadStyle.knob = skin.getDrawable("Joystick_knob");
@@ -97,7 +98,5 @@ public class VirtualJoystick {
 	}
 
 	public void dispose() {
-		baseTexture.dispose();
-		knobTexture.dispose();
 	}
 }

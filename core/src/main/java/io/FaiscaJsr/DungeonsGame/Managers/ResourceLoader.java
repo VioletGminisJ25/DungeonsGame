@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame;
+package io.FaiscaJsr.DungeonsGame.Managers;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
 
 public class ResourceLoader {
-	static Texture tiles = new Texture("tileset_complet.png");
+	static Texture tiles = AssetsManager.getTexture("tileset_complet.png");
 	public static Sprite floorTile(){
 		int x = 32;
 		int y = 32;
@@ -37,11 +37,11 @@ public class ResourceLoader {
         sprite.rotate(rotation);
         return sprite;
     }
-	public static Texture baseJoysitck(){
-		return new Texture("img/joystick_base.png");
-	}
-	public static Texture knobJoystick(){
-		return new Texture("img/joystick_knob.png");
-	}
+	// public static Texture baseJoysitck(){
+	// 	return new Texture("img/joystick_base.png");
+	// }
+	// public static Texture knobJoystick(){
+	// 	return new Texture("img/joystick_knob.png");
+	// }
 
 }

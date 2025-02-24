@@ -3,26 +3,30 @@ package io.FaiscaJsr.DungeonsGame.entities.Room;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
-import io.FaiscaJsr.DungeonsGame.entities.Enemy;
 import io.FaiscaJsr.DungeonsGame.entities.Goal;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
-import io.FaiscaJsr.DungeonsGame.entities.Slimes;
-import io.FaiscaJsr.DungeonsGame.entities.Bosses.SlimeKing;
+import io.FaiscaJsr.DungeonsGame.entities.ReverseGoal;
+import io.FaiscaJsr.DungeonsGame.entities.Enemies.Enemy;
+import io.FaiscaJsr.DungeonsGame.entities.Enemies.Slimes;
+import io.FaiscaJsr.DungeonsGame.entities.Enemies.Bosses.SlimeKing;
 import io.FaiscaJsr.DungeonsGame.entities.TileMap.Corner;
 import io.FaiscaJsr.DungeonsGame.entities.TileMap.Floor;
 import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
 import io.FaiscaJsr.DungeonsGame.entities.TileMap.Wall;
 
-public class Room {
+public class Room implements Disposable{
 
 	private int ID;
 
 	public boolean playerSpawn;
+	public Vector2 playerCoordinatesSpawn;
 
 	private int HEIGHT;
 
@@ -44,7 +48,7 @@ public class Room {
 	}
 
 	public enum GridSpace {
-		floor, wall, goal
+		floor, wall, goal,reverseGoal
 	}
 
 	public GridSpace[][] grid;
@@ -55,36 +59,40 @@ public class Room {
 	public ArrayList<Wall> walls;
 	public ArrayList<Corner> corners;
 	public Goal goal;
-	private Random rnd = new Random();
+	public ReverseGoal reverseGoal;
+	private static Random rnd = new Random();
 	private Player player;
-    public static ArrayList<Enemy> enemies = new ArrayList<>();
-    private int enemyCantSpawn;
+	public ArrayList<Enemy> enemies;
+	private PlayScreen playScreen;
+	private int enemyCantSpawn;
+	public boolean enemiesSpawned;
 
-	public Room(int id, Vector2 position, int width, int height,Player player, PlayScreen playScreen) {
+	public Room(int id, Vector2 position, int width, int height, Player player, PlayScreen playScreen) {
 		this.ID = id;
 		this.initialPosition = position;
 		this.WIDTH = width;
 		this.HEIGHT = height;
 		this.player = player;
+		this.playScreen = playScreen;
 		hitbox = new Rectangle(initialPosition.x - 128, initialPosition.y + 128, WIDTH * 32 + 128, HEIGHT * 32 + 128);
 		this.center = new Vector2(Math.round((initialPosition.x + ((width / 2) * Tile.DIM))),
 				Math.round((initialPosition.y + (height * Tile.DIM / 2))));
-		System.out.println("Initial position: " + initialPosition);
-		System.out.println("Width: " + WIDTH);
-		System.out.println("Height: " + height);
-		System.out.println("Center X:" + (initialPosition.x + (width / 2)));
-		System.out.println("Center Y:" + (initialPosition.y + (height / 2)));
-		System.out.println("");
+
+		// System.out.println("Initial position: " + initialPosition);
+		// System.out.println("Width: " + WIDTH);
+		// System.out.println("Height: " + height);
+		// System.out.println("Center X:" + (initialPosition.x + (width / 2)));
+		// System.out.println("Center Y:" + (initialPosition.y + (height / 2)));
+		// System.out.println("");
 		floors = new ArrayList<Floor>();
 		walls = new ArrayList<Wall>();
 		corners = new ArrayList<Corner>();
-        enemyCantSpawn = rnd.nextInt(10);
-        for(int i=0;i<enemyCantSpawn;i++){
-            enemies.add(new Slimes(player,playScreen,PlayScreen.world, this.center.x,this.center.y, 100, 1f, 1f,rnd.nextInt(7)));
-        }
-        enemies.add(new SlimeKing(player, playScreen, PlayScreen.world, this.center.x, this.center.y, 200, 1f, 1f));
-
+        enemies = new ArrayList<>();
 		// System.out.println("Room: " + hitbox);
+		setup();
+		load();
+		enemiesSpawned = false;
+		playerCoordinatesSpawn = new Vector2(rnd.nextFloat(this.center.x - this.WIDTH * 32 / 3,this.center.x + this.WIDTH * 32/ 3),rnd.nextFloat(this.center.y - this.HEIGHT * 32 / 3,this.center.y + this.HEIGHT * 32 / 3));
 	}
 
 	public void setup() {
@@ -105,13 +113,13 @@ public class Room {
 		for (int i = 0; i < grid.length; i++) {
 			for (int j = 0; j < grid[i].length; j++) {
 				if (grid[i][j] == GridSpace.wall) {
-					if (j >0 &&i!=0) {
+					if (j > 0 && i != 0) {
 						if (i + 1 < grid.length) {
 							if (grid[i + 1][j] == GridSpace.wall) {
 								if (count <= 0 || count < 1) {
 
-									grid[i][j] = GridSpace.goal;
-									grid[i + 1][j] = GridSpace.goal;
+									grid[i+1][j] = GridSpace.goal;
+									grid[i+1][j-grid[i].length+1] = GridSpace.reverseGoal;
 									count++;
 
 								}
@@ -202,11 +210,17 @@ public class Room {
 						Floor floor2 = new Floor(initialPosition.x + (i * Tile.DIM), initialPosition.y + (j * Tile.DIM),
 								0);
 						floors.add(floor2);
-						Goal goal = new Goal(initialPosition.x + (i * Tile.DIM/2),
-								initialPosition.y + (j * Tile.DIM), 0,player);
-						this.goal = goal;
-						break;
+						goal = new Goal(initialPosition.x + (i * Tile.DIM / 2),
+								initialPosition.y + (j * Tile.DIM), 0, player);
 
+						break;
+					case reverseGoal:
+						Floor floor3 = new Floor(initialPosition.x + (i * Tile.DIM), initialPosition.y + (j * Tile.DIM),
+								0);
+						floors.add(floor3);
+						reverseGoal = new ReverseGoal(initialPosition.x + (i * Tile.DIM / 2),
+								initialPosition.y + (j * Tile.DIM), 180, player);
+					break;
 					default:
 						break;
 				}
@@ -218,19 +232,24 @@ public class Room {
 
 	public void draw(SpriteBatch batch) {
 
-        for (Wall wall : walls) {
-            wall.getSprite().draw(batch);
+
+		for (Wall wall : walls) {
+            // System.out.println("wall");
+			wall.getSprite().draw(batch);
 		}
 		for (Corner corner : corners) {
-            corner.getSprite().draw(batch);
+			corner.getSprite().draw(batch);
 		}
 		for (Floor floor : floors) {
-            // System.out.println("floor");
+			// System.out.println("floor");
 			batch.draw(floor.getSprite(), floor.position.x, floor.position.y);
 		}
 		goal.getSprite().draw(batch);
-
-
+		reverseGoal.getSprite().draw(batch);
+		for (Enemy enemy : enemies) {
+			enemy.draw(batch);
+			enemy.update(Gdx.graphics.getDeltaTime());
+		}
 
 	}
 
@@ -244,4 +263,57 @@ public class Room {
 	public boolean collidesWith(Room other) {
 		return hitbox.overlaps(other.hitbox);
 	}
+
+	public void createEnemies() {
+		enemyCantSpawn = rnd.nextInt(1, 2);
+		enemies.add(new SlimeKing(
+				player, playScreen, PlayScreen.world, rnd.nextFloat(this.center.x - this.WIDTH * 32 / 3,
+						this.center.x + this.WIDTH * 32
+								/ 3),
+				rnd.nextFloat(this.center.y - this.HEIGHT * 32 / 3,
+						this.center.y + this.HEIGHT * 32 / 3),
+				200, 1f, 1f));
+		for (int i = 0; i < enemyCantSpawn; i++) {
+			enemies.add(new Slimes(player, playScreen, PlayScreen.world,
+					rnd.nextFloat(this.center.x - this.WIDTH * 32 / 3,
+							this.center.x + this.WIDTH * 32
+									/ 3),
+					rnd.nextFloat(this.center.y - this.HEIGHT * 32 / 3,
+							this.center.y + this.HEIGHT * 32 / 3),
+					100, 1f, 1f, rnd.nextInt(7)));
+		}
+	}
+
+	public boolean enemiesDefeated() {
+		int cont = 0;
+		for (Enemy enemy : enemies) {
+			if (enemy.isDestroyed()) {
+				cont++;
+			}
+		}
+		if(cont==enemies.size()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+    @Override
+    public void dispose() {
+        for (Wall wall : walls) {
+            wall.dispose();
+        }
+        for (Corner corner : corners) {
+            corner.dispose();
+        }
+        for (Floor floor : floors) {
+            // System.out.println("floor");
+            floor.dispose();
+        }
+        goal.dispose();
+        reverseGoal.dispose();
+        for (Enemy enemy : enemies) {
+            enemy.dispose();
+        }
+    }
 }

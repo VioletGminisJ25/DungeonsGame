@@ -1,4 +1,4 @@
-package io.FaiscaJsr.DungeonsGame.entities;
+package io.FaiscaJsr.DungeonsGame.entities.Enemies;
 
 import java.util.Random;
 
@@ -15,8 +15,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
+import io.FaiscaJsr.DungeonsGame.entities.Player;
 
-public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
+public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
 	private World world;
 	private Random random;
 
@@ -28,8 +29,7 @@ public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
 	private boolean isDead;
 	PlayScreen screen;
 	public boolean nohit = false;
-	public boolean ishit = false;
-    private int color;
+	private int color;
 
 	enum State {
 		move, attack, dead, idle, hit
@@ -40,17 +40,17 @@ public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
 	private Animation<TextureRegion> dead;
 	private Animation<TextureRegion> idle;
 	private Animation<TextureRegion> hit;
-	private Animation<TextureRegion> jump; //???
-
+	private Animation<TextureRegion> jump; // ???
 
 	public Slimes(Player player, PlayScreen screen, World world, float x, float y, int maxHealth,
-			float damage, float speed,int color) {
+			float damage, float speed, int color) {
 		super(player, world, new Texture("slimes/atlas/Slimes.png"), x, y, maxHealth, damage, speed);
 		setBounds(x, y, 240 / PlayScreen.PPM, 216 / PlayScreen.PPM);
 		this.screen = screen;
 		this.world = world;
-        this.color = color*72;
+		this.color = color * 72;
 		createBody(x, y);
+		runningRight = false;
 		random = new Random();
 		isAttacking = false;
 		isDead = false;
@@ -69,7 +69,7 @@ public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
 		for (int i = 0; i < 14; i++) {
 			attackRegions.add(new TextureRegion(atlas.findRegion("attack"), i * 80, color, 80, 72));
 		}
-		attack = new Animation<TextureRegion>(0.15f, attackRegions);
+		attack = new Animation<TextureRegion>(0.05f, attackRegions);
 		Array<TextureRegion> deadRegions = new Array<TextureRegion>();
 		for (int i = 0; i < 13; i++) {
 			deadRegions.add(new TextureRegion(atlas.findRegion("dead"), i * 80, color, 80, 72));
@@ -90,22 +90,18 @@ public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
 	private TextureRegion getFrame(float delta) {
 		currentState = getState();
 		TextureRegion region;
+
 		switch (currentState) {
 			case idle:
 				region = idle.getKeyFrame(stateTimer, true);
 				break;
 			case dead:
 				region = dead.getKeyFrame(stateTimer);
-				if (dead.isAnimationFinished(stateTimer)) {
-					enemyDead = true;
-				}
+				setDestroyed(true);
 				break;
 			case hit:
 				region = hit.getKeyFrame(stateTimer, false); // false = no loop
-				body.setLinearVelocity(0, 0);
-				if (hit.isAnimationFinished(stateTimer)) {
-					ishit = false; // Solo se desactiva cuando termina la animación
-				}
+
 				break;
 			case attack:
 				region = attack.getKeyFrame(stateTimer, true);
@@ -119,48 +115,40 @@ public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
 				break;
 		}
 		if (!enemyDead) {
+			float velocityX = body.getLinearVelocity().x;
 
-			if ((body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
-				region.flip(true, false);
-				runningRight = false;
-			} else if ((body.getLinearVelocity().x > 0 || runningRight) && region.isFlipX()) {
-				region.flip(true, false);
-				runningRight = true;
-			}
+			boolean movingLeft = velocityX < 0;
+			boolean movingRight = velocityX > 0;
+
+			if(movingLeft){
+                if(!region.isFlipX()){
+                    region.flip(true, false);
+                }
+            }else{
+                if(movingRight&&region.isFlipX()){
+                    region.flip(true, false);
+                }
+            }
 		}
+
 		stateTimer = currentState == previousState ? stateTimer + delta : 0;
 		previousState = currentState;
 		return region;
 	}
 
-	// public void hit(int damage, float delta) {
-
-	// 	super.setCooldownDamage(super.getCooldownDamage() + delta);
-	// 	if (super.getCooldownDamage() > 1f) {
-	// 		super.setCooldownDamage(0);
-	// 		super.setCurrentHealth(super.getCurrentHealth() - damage);
-	// 		ishit = true;
-	// 		System.out.println(super.getCurrentHealth());
-	// 	}
-
-	// }
-
 	private State getState() {
 
 		if (isDead) {
 			return State.dead;
-		}
-		if (ishit) {
-			return State.hit;
-		}
-		if (isAttacking) {
+		} else if (ishitPlayer) {
 			return State.attack;
-		}
-		if (body.getLinearVelocity().y != 0 && body.getLinearVelocity().x != 0) {
+		} else if (ishit()) {
+			return State.hit;
+		} else if (!body.getLinearVelocity().isZero()) {
 			return State.move;
+		} else {
+			return State.idle;
 		}
-
-		return State.idle;
 	}
 
 	@Override
@@ -172,18 +160,27 @@ public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
 		if (getCurrentHealth() <= 0) {
 			isDead = true;
 		}
+        if(isDead){
+            if (dead.isAnimationFinished(stateTimer)) {
+                enemyDead = true;
+            }
+        }
+		if (hit.isAnimationFinished(stateTimer)) {
+				setHit(false);
+		}
+		if (attack.isAnimationFinished(stateTimer)) {
+			ishitPlayer = false;
+		}
 	}
 
 	public void changeState(float dt) {
-		if (screen.player.body.getPosition().dst(body.getPosition()) > 100) {
+		if (screen.player.body.getPosition().dst(body.getPosition()) >= 100 && screen.player.body.getPosition()
+				.dst(body.getPosition()) <= 150) {
 			body.setLinearVelocity(
 					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(5000).scl(dt)));
-		} else if (screen.player.body.getPosition().dst(body.getPosition()) <= 100
-				&& screen.player.body.getPosition().dst(body.getPosition()) >= 40) {
+		} else if (screen.player.body.getPosition().dst(body.getPosition()) <= 100) {
 			body.setLinearVelocity(
 					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(3000).scl(dt)));
-		} else {
-			body.setLinearVelocity(new Vector2(0, 0));
 		}
 	}
 
@@ -199,13 +196,19 @@ public class Slimes extends Enemy {//TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
 		CircleShape shape = new CircleShape();
 		shape.setRadius(7);
 		fixtureDef.shape = shape;
+		fixtureDef.filter.categoryBits = PlayScreen.ENEMY_BIT_MASK;
+		fixtureDef.filter.maskBits = PlayScreen.ATTACK_BIT_MASK | PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK
+				| PlayScreen.WALL_BIT_MASK | PlayScreen.ENEMY_BIT_MASK | PlayScreen.REVERSE_GOAL_BIT_MASK;
 		body.createFixture(fixtureDef);
 		shape.dispose();
+		fixtureDef = new FixtureDef();
 		PolygonShape edgeShape = new PolygonShape();
 		edgeShape.setAsBox(60 / PlayScreen.PPM, 60 / PlayScreen.PPM);
 		fixtureDef.shape = edgeShape;
+		fixtureDef.isSensor = true;
 		fixtureDef.filter.categoryBits = PlayScreen.ENEMY_BIT_MASK;
-		fixtureDef.filter.maskBits = PlayScreen.ATTCK_BIT_MASK |PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK | PlayScreen.WALL_BIT_MASK |PlayScreen.ENEMY_BIT_MASK;
+		fixtureDef.filter.maskBits = PlayScreen.ATTACK_BIT_MASK | PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK
+				| PlayScreen.WALL_BIT_MASK | PlayScreen.ENEMY_BIT_MASK | PlayScreen.REVERSE_GOAL_BIT_MASK;
 		body.createFixture(fixtureDef).setUserData(this);
 		edgeShape.dispose();
 
