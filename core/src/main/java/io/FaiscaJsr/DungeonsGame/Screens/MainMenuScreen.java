@@ -1,7 +1,5 @@
 package io.FaiscaJsr.DungeonsGame.Screens;
 
-import org.w3c.dom.Text;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -23,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.AssetsManager;
 
 public class MainMenuScreen implements Screen {
 
@@ -35,6 +34,9 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(Main game) {
         super();
         this.game = game;
+
+        game.playMusic("MainMenu/sound/menuMusic.mp3",true);
+
 
         viewport = new StretchViewport(1920, 1080, new OrthographicCamera());
         stage = new Stage(viewport, ((Main) game).batch);
@@ -82,42 +84,24 @@ public class MainMenuScreen implements Screen {
                 dispose();
             }
         });
-        // TextButton = new TextButton("Start Game", estiloBoton);
-        // table.add(startButton);
-        // startButton.addListener(new ClickListener() {
-        // @Override
-        // public void clicked(InputEvent event, float x, float y) {
-        // game.setScreen(new PlayScreen(game));
-        // dispose();
-        // }
-        // });
-        // TextButton startButton = new TextButton("Start Game", estiloBoton);
-        // table.add(startButton);
-        // startButton.addListener(new ClickListener() {
-        // @Override
-        // public void clicked(InputEvent event, float x, float y) {
-        // game.setScreen(new PlayScreen(game));
-        // dispose();
-        // }
-        // });
-        // TextButton startButton = new TextButton("Start Game", estiloBoton);
-        // table.add(startButton);
-        // startButton.addListener(new ClickListener() {
-        // @Override
-        // public void clicked(InputEvent event, float x, float y) {
-        // game.setScreen(new PlayScreen(game));
-        // dispose();
-        // }
-        // });
-        // TextButton startButton = new TextButton("Start Game", estiloBoton);
-        // table.add(startButton);
-        // startButton.addListener(new ClickListener() {
-        // @Override
-        // public void clicked(InputEvent event, float x, float y) {
-        // game.setScreen(new PlayScreen(game));
-        // dispose();
-        // }
-        // });
+
+        optionsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new SettingsScreen(game));
+                dispose();
+            }
+        });
+
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                dispose();
+                Gdx.app.exit();
+                System.exit(0);
+            }
+        });
+
         stage.addActor(table);
 
     }

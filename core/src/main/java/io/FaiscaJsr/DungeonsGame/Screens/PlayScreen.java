@@ -17,15 +17,15 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
 import io.FaiscaJsr.DungeonsGame.Managers.AssetsManager;
+import io.FaiscaJsr.DungeonsGame.MapGenerator.BspTree;
+import io.FaiscaJsr.DungeonsGame.MapGenerator.Room.Room;
+import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Floor;
+import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Tile;
+import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Wall;
 import io.FaiscaJsr.DungeonsGame.Tools.WorldContactListener;
-import io.FaiscaJsr.DungeonsGame.entities.BspTree;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
 import io.FaiscaJsr.DungeonsGame.entities.VirtualJoystick;
 import io.FaiscaJsr.DungeonsGame.entities.Enemies.Enemy;
-import io.FaiscaJsr.DungeonsGame.entities.Room.Room;
-import io.FaiscaJsr.DungeonsGame.entities.TileMap.Floor;
-import io.FaiscaJsr.DungeonsGame.entities.TileMap.Tile;
-import io.FaiscaJsr.DungeonsGame.entities.TileMap.Wall;
 
 public class PlayScreen implements Screen {
 
@@ -79,6 +79,7 @@ public class PlayScreen implements Screen {
 
 	@Override
 	public void show() {
+        game.stopMusic();
 	}
 
 	@Override

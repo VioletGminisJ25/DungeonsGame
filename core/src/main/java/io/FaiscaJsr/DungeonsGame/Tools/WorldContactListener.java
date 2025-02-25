@@ -6,10 +6,10 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Goal;
+import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.ReverseGoal;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
-import io.FaiscaJsr.DungeonsGame.entities.Goal;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
-import io.FaiscaJsr.DungeonsGame.entities.ReverseGoal;
 import io.FaiscaJsr.DungeonsGame.entities.Enemies.Enemy;
 
 public class WorldContactListener implements ContactListener {

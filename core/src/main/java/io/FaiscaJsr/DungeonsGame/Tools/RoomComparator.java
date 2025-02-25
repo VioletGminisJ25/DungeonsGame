@@ -2,7 +2,7 @@ package io.FaiscaJsr.DungeonsGame.Tools;
 
 import java.util.Comparator;
 
-import io.FaiscaJsr.DungeonsGame.entities.Room.Room;
+import io.FaiscaJsr.DungeonsGame.MapGenerator.Room.Room;
 
 public class RoomComparator implements Comparator<Room> {
 

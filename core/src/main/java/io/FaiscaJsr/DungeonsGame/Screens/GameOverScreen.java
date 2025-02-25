@@ -90,12 +90,12 @@ public class GameOverScreen implements Screen {
                 dispose();
             }
         });
-        // exitButton.addListener(new ClickListener(){
-        //     @Override
-        //     public void clicked(InputEvent event, float x, float y) {
-        //         game.setScreen(new MainMenuScreen(game));
-        //     }
-        // });
+        exitButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainMenuScreen(game));
+            }
+        });
 	}
 
 	@Override
