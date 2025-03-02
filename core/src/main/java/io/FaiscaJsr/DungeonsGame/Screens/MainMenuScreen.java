@@ -35,8 +35,7 @@ public class MainMenuScreen implements Screen {
 		super();
 		this.game = game;
 
-		game.playMusic("MainMenu/sound/menuMusic.mp3",true);
-
+		game.playMusic("MainMenu/sound/menuMusic.wav", true);
 
 		viewport = new StretchViewport(1920, 1080, new OrthographicCamera());
 		stage = new Stage(viewport, ((Main) game).batch);

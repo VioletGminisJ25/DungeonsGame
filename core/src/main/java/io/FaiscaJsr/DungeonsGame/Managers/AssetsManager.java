@@ -13,7 +13,7 @@ public class AssetsManager {
         assetManager.load("img/joystick_base.png",Texture.class);
         assetManager.load("img/joystick_knob.png",Texture.class);
         assetManager.load("tileset_complet.png",Texture.class);
-        assetManager.load("MainMenu/sound/menuMusic.mp3",Music.class);
+        assetManager.load("MainMenu/sound/menuMusic.wav",Music.class);
     }
 
     public static void finishLoading(){
@@ -21,7 +21,6 @@ public class AssetsManager {
     }
 
     public static Texture getTexture(String path){
-        System.out.println("Cargando: "+ assetManager.get(path, Texture.class).getClass());
         return assetManager.get(path,Texture.class);
     }
 

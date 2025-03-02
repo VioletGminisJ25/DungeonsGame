@@ -46,8 +46,6 @@ public class WorldContactListener implements ContactListener {
 					// System.out.println("Enemy added: " + enemy);
 					Enemy.enemiesToHit.add(enemy);
 
-					System.out.println(enemy.getCurrentHealth());
-					System.out.println(Enemy.enemiesToHit.size());
 				}
 
 				break;

@@ -71,18 +71,19 @@ public class PlayScreen implements Screen {
 		BspTree.rooms.get(0).playerSpawn = true;
 		player.body.setTransform(BspTree.rooms.get(0).playerCoordinatesSpawn, 0);
 		BspTree.rooms.get(0).roomManager.roomInitialized();
+		System.out.println("Rooms: " + BspTree.rooms.size());
 	}
 
 	@Override
 	public void show() {
-        game.stopMusic();
+		game.stopMusic();
 	}
 
 	@Override
 	public void render(float delta) {
-        update(delta);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		update(delta);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		game.batch.begin();
 		BspTree.draw(game.batch);
@@ -91,13 +92,13 @@ public class PlayScreen implements Screen {
 		game.batch.end();
 
 		virtualJoystick.render();
-//		debugRenderer.render(world, stage.getCamera().combined);
+		// debugRenderer.render(world, stage.getCamera().combined);
 		if (player.isDead()) {
-            if (player.death.isAnimationFinished(player.stateTimer)) {
-                GameOverScreen gameOverScreen = new GameOverScreen(game);
+			if (player.death.isAnimationFinished(player.stateTimer)) {
+				GameOverScreen gameOverScreen = new GameOverScreen(game);
 				game.setScreen(gameOverScreen);
 				dispose();
-                System.out.println("Game Over");
+				System.out.println("Game Over");
 			}
 		}
 
@@ -109,11 +110,11 @@ public class PlayScreen implements Screen {
 		// for (Enemy enemy : Room.enemies) { // FIX: actualiza la lista de enemigos con
 		// cada enemigo = muerte instantanea
 		// // al recibir daño
-		
+
 		// enemy.update(delta);
-		
+
 		// }
-		
+
 		BspTree.rooms.get(Player.currentRoom).roomManager.update(delta);
 
 		if (!Enemy.enemiesToHit.isEmpty()) {
@@ -138,14 +139,12 @@ public class PlayScreen implements Screen {
 		for (Enemy enemy : Enemy.enemiesToRemove) {
 			if (enemy.body != null) {
 				world.destroyBody(enemy.body);
-				enemy.body = null; 
+				enemy.body = null;
 			}
 			// Room.enemies.remove(enemy);
 		}
 
 		Enemy.enemiesToRemove.clear();
-		
-
 
 		player.update(delta);
 		game.batch.setProjectionMatrix(stage.getCamera().combined);

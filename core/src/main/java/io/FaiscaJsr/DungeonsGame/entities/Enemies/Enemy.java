@@ -124,6 +124,5 @@ public abstract class Enemy extends Sprite implements Disposable {
 	public void hit(int damage, float delta) {
 		currentHealth = currentHealth - damage;
 		ishit = true;
-		System.out.println("Health: "+currentHealth);
 	}
 }

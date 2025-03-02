@@ -224,14 +224,12 @@ public class Room implements Disposable{
 	public void draw(SpriteBatch batch) {
 
 		for (Wall wall : walls) {
-			// System.out.println("wall");
 			wall.getSprite().draw(batch);
 		}
 		for (Corner corner : corners) {
 			corner.getSprite().draw(batch);
 		}
 		for (Floor floor : floors) {
-			// System.out.println("floor");
 			batch.draw(floor.getSprite(), floor.position.x, floor.position.y);
 		}
 		goal.getSprite().draw(batch);

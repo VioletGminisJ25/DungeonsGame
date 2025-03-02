@@ -128,7 +128,6 @@ public class SlimeKing extends Enemy {
 			return State.dead;
 		}
 		if (ishit()) {
-			System.out.println("ENTRO");
 			return State.hit;
 		}
 		if (isAttacking) {
