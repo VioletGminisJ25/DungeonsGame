@@ -87,7 +87,7 @@ public class Room implements Disposable{
 		floors = new ArrayList<Floor>();
 		walls = new ArrayList<Wall>();
 		corners = new ArrayList<Corner>();
-        enemies = new ArrayList<>();
+		enemies = new ArrayList<Enemy>();
 		// System.out.println("Room: " + hitbox);
 		setup();
 		load();
@@ -234,7 +234,7 @@ public class Room implements Disposable{
 
 
 		for (Wall wall : walls) {
-            // System.out.println("wall");
+			// System.out.println("wall");
 			wall.getSprite().draw(batch);
 		}
 		for (Corner corner : corners) {
@@ -265,7 +265,7 @@ public class Room implements Disposable{
 	}
 
 	public void createEnemies() {
-		enemyCantSpawn = rnd.nextInt(1, 2);
+		enemyCantSpawn = rnd.nextInt(1, 15);
 		enemies.add(new SlimeKing(
 				player, playScreen, PlayScreen.world, rnd.nextFloat(this.center.x - this.WIDTH * 32 / 3,
 						this.center.x + this.WIDTH * 32
@@ -298,22 +298,21 @@ public class Room implements Disposable{
 		}
 	}
 
-    @Override
-    public void dispose() {
-        for (Wall wall : walls) {
-            wall.dispose();
-        }
-        for (Corner corner : corners) {
-            corner.dispose();
-        }
-        for (Floor floor : floors) {
-            // System.out.println("floor");
-            floor.dispose();
-        }
-        goal.dispose();
-        reverseGoal.dispose();
-        for (Enemy enemy : enemies) {
-            enemy.dispose();
-        }
-    }
+	@Override
+	public void dispose() {
+		for (Wall wall : walls) {
+			wall.dispose();
+		}
+		for (Corner corner : corners) {
+			corner.dispose();
+		}
+		for (Floor floor : floors) {
+			floor.dispose();
+		}
+		goal.dispose();
+		reverseGoal.dispose();
+		for (Enemy enemy : enemies) {
+			enemy.dispose();
+		}
+	}
 }

@@ -168,6 +168,7 @@ public class Player extends Sprite implements Disposable {
         bodyDef.position.set(0, 0);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         // bodyDef.linearDamping = 5f;
+
         body = world.createBody(bodyDef);
 
         FixtureDef fixtureDef = new FixtureDef();
@@ -180,6 +181,7 @@ public class Player extends Sprite implements Disposable {
         });
         fixtureDef.shape = edgeShape;
         fixtureDef.filter.categoryBits = PlayScreen.PLAYER_BIT_MASK;
+        fixtureDef.restitution = 50f;
 
         fixtureDef.filter.maskBits = PlayScreen.WALL_BIT_MASK |
                 PlayScreen.GOAL_BIT_MASK | PlayScreen.ENEMY_BIT_MASK | PlayScreen.ITEM_BIT_MASK
@@ -245,6 +247,7 @@ public class Player extends Sprite implements Disposable {
         bodyAttack = world.createBody(bodyDef);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 10000f;
+        fixtureDef.restitution = 50f;
         PolygonShape attackShape = new PolygonShape();
 
         if (!runningRight) {
