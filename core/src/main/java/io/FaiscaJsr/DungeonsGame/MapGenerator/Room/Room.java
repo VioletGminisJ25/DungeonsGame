@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
+import io.FaiscaJsr.DungeonsGame.Managers.RoomManager;
 import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Corner;
 import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Floor;
 import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Goal;
@@ -18,8 +19,6 @@ import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Wall;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
 import io.FaiscaJsr.DungeonsGame.entities.Enemies.Enemy;
-import io.FaiscaJsr.DungeonsGame.entities.Enemies.Slimes;
-import io.FaiscaJsr.DungeonsGame.entities.Enemies.Bosses.SlimeKing;
 
 public class Room implements Disposable{
 
@@ -64,7 +63,8 @@ public class Room implements Disposable{
 	private Player player;
 	public ArrayList<Enemy> enemies;
 	private PlayScreen playScreen;
-	private int enemyCantSpawn;
+	public RoomManager roomManager;
+	
 	public boolean enemiesSpawned;
 
 	public Room(int id, Vector2 position, int width, int height, Player player, PlayScreen playScreen) {
@@ -78,21 +78,17 @@ public class Room implements Disposable{
 		this.center = new Vector2(Math.round((initialPosition.x + ((width / 2) * Tile.DIM))),
 				Math.round((initialPosition.y + (height * Tile.DIM / 2))));
 
-		// System.out.println("Initial position: " + initialPosition);
-		// System.out.println("Width: " + WIDTH);
-		// System.out.println("Height: " + height);
-		// System.out.println("Center X:" + (initialPosition.x + (width / 2)));
-		// System.out.println("Center Y:" + (initialPosition.y + (height / 2)));
-		// System.out.println("");
 		floors = new ArrayList<Floor>();
 		walls = new ArrayList<Wall>();
 		corners = new ArrayList<Corner>();
 		enemies = new ArrayList<Enemy>();
-		// System.out.println("Room: " + hitbox);
 		setup();
 		load();
 		enemiesSpawned = false;
-		playerCoordinatesSpawn = new Vector2(rnd.nextFloat(this.center.x - this.WIDTH * 32 / 3,this.center.x + this.WIDTH * 32/ 3),rnd.nextFloat(this.center.y - this.HEIGHT * 32 / 3,this.center.y + this.HEIGHT * 32 / 3));
+		playerCoordinatesSpawn = new Vector2(
+				rnd.nextFloat(this.center.x - this.WIDTH * 32 / 3, this.center.x + this.WIDTH * 32 / 3),
+				rnd.nextFloat(this.center.y - this.HEIGHT * 32 / 3, this.center.y + this.HEIGHT * 32 / 3));
+		roomManager = new RoomManager(this, playScreen);
 	}
 
 	public void setup() {
@@ -145,11 +141,6 @@ public class Room implements Disposable{
 						break;
 
 					case wall:
-						// Don't use batch.draw(sprite, ...) Use sprite.draw(batch). This is due to an
-						// unfortunate design decision to make Sprite extend from TextureRegion. But if
-						// you draw it like a TextureRegion, all its position and rotation properties
-						// are ignored.
-						// Vamos que si son sprites utilices sprite.draw entiendo
 						if (i == 0) {
 							if (j == 0) {
 								Corner corner = new Corner(initialPosition.x + (i * Tile.DIM),
@@ -232,7 +223,6 @@ public class Room implements Disposable{
 
 	public void draw(SpriteBatch batch) {
 
-
 		for (Wall wall : walls) {
 			// System.out.println("wall");
 			wall.getSprite().draw(batch);
@@ -253,6 +243,8 @@ public class Room implements Disposable{
 
 	}
 
+
+
 	public boolean intersects(Room room) {
 		return (initialPosition.x <= room.initialPosition.x + room.WIDTH
 				&& initialPosition.x + this.WIDTH >= room.initialPosition.x
@@ -264,39 +256,8 @@ public class Room implements Disposable{
 		return hitbox.overlaps(other.hitbox);
 	}
 
-	public void createEnemies() {
-		enemyCantSpawn = rnd.nextInt(1, 15);
-		enemies.add(new SlimeKing(
-				player, playScreen, PlayScreen.world, rnd.nextFloat(this.center.x - this.WIDTH * 32 / 3,
-						this.center.x + this.WIDTH * 32
-								/ 3),
-				rnd.nextFloat(this.center.y - this.HEIGHT * 32 / 3,
-						this.center.y + this.HEIGHT * 32 / 3),
-				200, 1f, 1f));
-		for (int i = 0; i < enemyCantSpawn; i++) {
-			enemies.add(new Slimes(player, playScreen, PlayScreen.world,
-					rnd.nextFloat(this.center.x - this.WIDTH * 32 / 3,
-							this.center.x + this.WIDTH * 32
-									/ 3),
-					rnd.nextFloat(this.center.y - this.HEIGHT * 32 / 3,
-							this.center.y + this.HEIGHT * 32 / 3),
-					100, 1f, 1f, rnd.nextInt(7)));
-		}
-	}
+	
 
-	public boolean enemiesDefeated() {
-		int cont = 0;
-		for (Enemy enemy : enemies) {
-			if (enemy.isDestroyed()) {
-				cont++;
-			}
-		}
-		if(cont==enemies.size()){
-			return true;
-		}else{
-			return false;
-		}
-	}
 
 	@Override
 	public void dispose() {

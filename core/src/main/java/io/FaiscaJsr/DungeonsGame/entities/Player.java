@@ -181,7 +181,6 @@ public class Player extends Sprite implements Disposable {
         });
         fixtureDef.shape = edgeShape;
         fixtureDef.filter.categoryBits = PlayScreen.PLAYER_BIT_MASK;
-        fixtureDef.restitution = 50f;
 
         fixtureDef.filter.maskBits = PlayScreen.WALL_BIT_MASK |
                 PlayScreen.GOAL_BIT_MASK | PlayScreen.ENEMY_BIT_MASK | PlayScreen.ITEM_BIT_MASK

@@ -16,12 +16,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
-import io.FaiscaJsr.DungeonsGame.Managers.AssetsManager;
 import io.FaiscaJsr.DungeonsGame.MapGenerator.BspTree;
-import io.FaiscaJsr.DungeonsGame.MapGenerator.Room.Room;
-import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Floor;
 import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Tile;
-import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Wall;
 import io.FaiscaJsr.DungeonsGame.Tools.WorldContactListener;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
 import io.FaiscaJsr.DungeonsGame.entities.VirtualJoystick;
@@ -74,7 +70,7 @@ public class PlayScreen implements Screen {
 		tree.load(tree);
 		BspTree.rooms.get(0).playerSpawn = true;
 		player.body.setTransform(BspTree.rooms.get(0).playerCoordinatesSpawn, 0);
-		BspTree.rooms.get(Player.currentRoom).createEnemies();
+		BspTree.rooms.get(0).roomManager.roomInitialized();
 	}
 
 	@Override
@@ -108,15 +104,17 @@ public class PlayScreen implements Screen {
 	}
 
 	public void update(float delta) {
-        world.step(1 / 60f, 6, 2);
+		world.step(1 / 60f, 6, 2);
 		HandleInput(delta);
 		// for (Enemy enemy : Room.enemies) { // FIX: actualiza la lista de enemigos con
 		// cada enemigo = muerte instantanea
 		// // al recibir daño
-
+		
 		// enemy.update(delta);
-
+		
 		// }
+		
+		BspTree.rooms.get(Player.currentRoom).roomManager.update(delta);
 
 		if (!Enemy.enemiesToHit.isEmpty()) {
 			// System.out.println("Enemies to hit: " + enemiesToHit.size());
@@ -140,11 +138,14 @@ public class PlayScreen implements Screen {
 		for (Enemy enemy : Enemy.enemiesToRemove) {
 			if (enemy.body != null) {
 				world.destroyBody(enemy.body);
+				enemy.body = null; 
 			}
 			// Room.enemies.remove(enemy);
 		}
 
 		Enemy.enemiesToRemove.clear();
+		
+
 
 		player.update(delta);
 		game.batch.setProjectionMatrix(stage.getCamera().combined);

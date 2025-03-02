@@ -48,17 +48,15 @@ public class Goal extends Tile {
     public void reachGoal() {
         System.out.println("Reach Goal");
         if (Player.currentRoom < BspTree.rooms.size() - 1) {
-            if (BspTree.rooms.get(Player.currentRoom).enemiesDefeated()) {
+            if (BspTree.rooms.get(Player.currentRoom).roomManager.finishRoom()) {
                 Gdx.app.postRunnable(() -> {// no entiendo que es xd
                     player.body.setTransform(BspTree.rooms.get(++Player.currentRoom).playerCoordinatesSpawn, 0);
+                    // Player.currentRoom++;
                     if (!BspTree.rooms.get(Player.currentRoom).enemiesSpawned) {
-                        BspTree.rooms.get(Player.currentRoom).createEnemies();
+                        BspTree.rooms.get(Player.currentRoom).roomManager.roomInitialized();
                         BspTree.rooms.get(Player.currentRoom).enemiesSpawned = true;
                     }
-                    // for (Enemy enemy : BspTree.rooms.get(Player.currentRoom - 1).enemies) {
-                    // PlayScreen.world.destroyBody(enemy.body);
-                    // }
-                    BspTree.rooms.get(Player.currentRoom - 1).enemies.clear();
+                    // BspTree.rooms.get(Player.currentRoom - 1).enemies.clear();
                 });
             }
         }

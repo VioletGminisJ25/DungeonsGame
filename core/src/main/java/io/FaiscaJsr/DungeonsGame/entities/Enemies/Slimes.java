@@ -27,6 +27,7 @@ public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA x
 	private boolean runningRight;
 	private boolean isAttacking;
 	private boolean isDead;
+	private boolean moving;
 	PlayScreen screen;
 	public boolean nohit = false;
 	private int color;
@@ -49,6 +50,7 @@ public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA x
 		this.screen = screen;
 		this.world = world;
 		this.color = color * 72;
+		this.moving = false;
 		createBody(x, y);
 		runningRight = false;
 		random = new Random();
@@ -120,15 +122,15 @@ public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA x
 			boolean movingLeft = velocityX < 0;
 			boolean movingRight = velocityX > 0;
 
-			if(movingLeft){
-                if(!region.isFlipX()){
-                    region.flip(true, false);
-                }
-            }else{
-                if(movingRight&&region.isFlipX()){
-                    region.flip(true, false);
-                }
-            }
+			if (movingLeft) {
+				if (!region.isFlipX()) {
+					region.flip(true, false);
+				}
+			} else {
+				if (movingRight && region.isFlipX()) {
+					region.flip(true, false);
+				}
+			}
 		}
 
 		stateTimer = currentState == previousState ? stateTimer + delta : 0;
@@ -144,7 +146,7 @@ public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA x
 			return State.attack;
 		} else if (ishit()) {
 			return State.hit;
-		} else if (!body.getLinearVelocity().isZero()) {
+		} else if (moving) {
 			return State.move;
 		} else {
 			return State.idle;
@@ -154,34 +156,40 @@ public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA x
 	@Override
 	public void update(float dt) {
 		super.update(dt);
-		setPosition(body.getPosition().x - getWidth() / 2 + 3, body.getPosition().y - getHeight() / 2);
-		changeState(dt);
-		setRegion(getFrame(dt));
-		if (getCurrentHealth() <= 0) {
-			isDead = true;
+		if (body != null) {
+			setPosition(body.getPosition().x - getWidth() / 2 + 3, body.getPosition().y - getHeight() / 2);
+			changeState(dt);
 		}
-        if(isDead){
-            if (dead.isAnimationFinished(stateTimer)) {
-                enemyDead = true;
-            }
-        }
-		if (hit.isAnimationFinished(stateTimer)) {
+			setRegion(getFrame(dt));
+			if (getCurrentHealth() <= 0) {
+				isDead = true;
+			}
+			if (isDead) {
+				if (dead.isAnimationFinished(stateTimer)) {
+					enemyDead = true;
+				}
+			}
+			if (hit.isAnimationFinished(stateTimer)) {
 				setHit(false);
-		}
-		if (attack.isAnimationFinished(stateTimer)) {
-			ishitPlayer = false;
-		}
+			}
+			if (attack.isAnimationFinished(stateTimer)) {
+				ishitPlayer = false;
+			}
 	}
-
+		
 	public void changeState(float dt) {
 		if (screen.player.body.getPosition().dst(body.getPosition()) >= 100 && screen.player.body.getPosition()
 				.dst(body.getPosition()) <= 150) {
 			body.setLinearVelocity(
 					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(5000).scl(dt)));
+					moving = true;
 		} else if (screen.player.body.getPosition().dst(body.getPosition()) <= 100) {
 			body.setLinearVelocity(
 					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(3000).scl(dt)));
-		}
+					moving = true;
+				} else {
+					moving = false;
+				}
 	}
 
 	@Override

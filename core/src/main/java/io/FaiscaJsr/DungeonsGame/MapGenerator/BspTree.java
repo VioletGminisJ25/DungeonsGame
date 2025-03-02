@@ -91,9 +91,6 @@ public class BspTree  {
         for (Room room : rooms) {
 			room.draw(batch);
 		}
-		// for (Floor floor : floors) {
-		// 	batch.draw(floor.getSprite(), floor.position.x, floor.position.y);
-		// }
 	}
 
 	public static void dispose() {
