@@ -51,7 +51,7 @@ public class Goal extends Tile {
 
 	public void reachGoal() {
 		System.out.println("Reach Goal");
-		if (Player.currentRoom < 2 - 1) {//TODO: Change this
+		if (Player.currentRoom < BspTree.rooms.size() - 1) {
 			if (BspTree.rooms.get(Player.currentRoom).roomManager.finishRoom()) {
 				Gdx.app.postRunnable(() -> {// no entiendo que es xd
 					player.body.setTransform(BspTree.rooms.get(++Player.currentRoom).playerCoordinatesSpawn, 0);

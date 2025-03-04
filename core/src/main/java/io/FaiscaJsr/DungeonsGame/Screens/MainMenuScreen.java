@@ -34,8 +34,6 @@ public class MainMenuScreen implements Screen {
 		super();
 		this.game = game;
 
-		
-
 		viewport = new StretchViewport(1920, 1080, new OrthographicCamera());
 		stage = new Stage(viewport, ((Main) game).batch);
 		background = new Sprite(new Texture(Gdx.files.internal("MainMenu/upscalemedia-transformed.jpeg")));
@@ -73,6 +71,17 @@ public class MainMenuScreen implements Screen {
 		TextButton optionsButton = new TextButton("Options", estiloBoton);
 		table.add(optionsButton).pad(20);
 		table.row();
+		TextButton btnRecords = new TextButton("Records", estiloBoton);
+		btnRecords.setPosition(100, 125);
+		btnRecords.addListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				game.setScreen(new RecordsScreen(game));
+			}
+		});
+
+		stage.addActor(btnRecords);
+		table.row();
 		TextButton exitButton = new TextButton("Exit", estiloBoton);
 		table.add(exitButton).pad(20);
 		startButton.addListener(new ClickListener() {
@@ -86,7 +95,7 @@ public class MainMenuScreen implements Screen {
 		optionsButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				
+
 				game.setScreen(new SettingsScreen(game));
 				dispose();
 			}

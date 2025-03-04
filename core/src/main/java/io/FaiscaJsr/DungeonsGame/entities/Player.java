@@ -15,7 +15,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.TimeManager;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
+import io.FaiscaJsr.DungeonsGame.Tools.GamePreferences;
 
 public class Player extends Sprite implements Disposable {
 	public enum State {
@@ -300,7 +302,9 @@ public class Player extends Sprite implements Disposable {
 	}
 
 	public void hit(int damage) {
-		Gdx.input.vibrate(100);
+		if (GamePreferences.isVibrationEnabled()) {
+			Gdx.input.vibrate(100);
+		}
 		currentHealth = currentHealth - damage;
 		isHit = true;
 	}
@@ -312,7 +316,7 @@ public class Player extends Sprite implements Disposable {
     }
 
     public void pickupTime() {
-        screen.timeManager.setTimeLeft(screen.timeManager.getTimeLeft()+20);
+        TimeManager.timeLeft+=20;
     }
 
 }

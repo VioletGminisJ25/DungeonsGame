@@ -108,7 +108,7 @@ public class SettingsScreen implements Screen {
                     vibrationButton.setText("On");
                 } else {
                     vibrationButton.setText("Off");
-                } // TODO:Vibration
+                }
             }
         });
 

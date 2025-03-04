@@ -78,18 +78,18 @@ public class WorldContactListener implements ContactListener {
 					if (fixtureA.getFilterData().categoryBits == PlayScreen.PLAYER_BIT_MASK) {
 						System.out.println("HEART");
 						if (fixtureB.getUserData().getClass() == Heart.class) {
-							((Player) fixtureB.getUserData()).pickupHeart();
-							((Heart) fixtureA.getUserData()).destroy();
-						} else if (fixtureA.getUserData().getClass() == Time.class) {
-							((Player) fixtureB.getUserData()).pickupTime();
-							((Time) fixtureA.getUserData()).destroy();
+							((Player) fixtureA.getUserData()).pickupHeart();
+							((Heart) fixtureB.getUserData()).destroy();
+						} else if (fixtureB.getUserData().getClass() == Time.class) {
+							((Player) fixtureA.getUserData()).pickupTime();
+							((Time) fixtureB.getUserData()).destroy();
 						}
 					} else {
 						if (fixtureA.getUserData().getClass() == Heart.class) {
 							System.out.println("HEART");
 
-							((Player) fixtureA.getUserData()).pickupHeart();
-							((Heart) fixtureB.getUserData()).destroy();
+							((Player) fixtureB.getUserData()).pickupHeart();
+							((Heart) fixtureA.getUserData()).destroy();
 						} else if (fixtureB.getUserData().getClass() == Time.class) {
 							((Player) fixtureA.getUserData()).pickupTime();
 							((Time) fixtureB.getUserData()).destroy();

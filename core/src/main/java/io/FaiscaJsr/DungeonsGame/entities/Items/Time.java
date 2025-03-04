@@ -23,6 +23,7 @@ public class Time extends Sprite {
 	public static ArrayList<Time> time = new ArrayList<Time>();
 	private float stateTimer;
 	private Body body;
+	public static int times = 0;
 
 	public Time(float x, float y) {
 		super();
@@ -38,7 +39,7 @@ public class Time extends Sprite {
 		defineBody();
 		body.setTransform(x, y, 0);
 	}
-	
+
 	private TextureRegion getFrame(float delta) {
 		TextureRegion region;
 
@@ -82,13 +83,14 @@ public class Time extends Sprite {
 
 		edgeShape.dispose();
 	}
+
 	public void destroy() {
 		// PlayScreen.world.destroyBody(body);
 		// body = null;
 		Time.time.remove(this);
-	
+		PlayScreen.bodiesToRemove.add(body);
+		times++;
+
 	}
 
-
-	
 }

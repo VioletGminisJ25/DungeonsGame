@@ -3,19 +3,12 @@ package io.FaiscaJsr.DungeonsGame.Managers;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 
 public class TimeManager {
-	private float timeLeft; // Tiempo en segundos
-	public float getTimeLeft() {
-		return timeLeft;
-	}
-
-	public void setTimeLeft(float timeLeft) {
-		this.timeLeft = timeLeft;
-	}
+	public static float timeLeft = 5*60; // Tiempo en segundos
 
 	private PlayScreen screen;
 
 	public TimeManager(PlayScreen screen) {
-		timeLeft = 5*60; // 5 minutos en segundos
+		 // 5 minutos en segundos
 		this.screen = screen;
 	}
 

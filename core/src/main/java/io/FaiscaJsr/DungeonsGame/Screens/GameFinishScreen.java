@@ -23,6 +23,9 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.TimeManager;
+import io.FaiscaJsr.DungeonsGame.Tools.GamePreferences;
+import io.FaiscaJsr.DungeonsGame.entities.Items.Time;
 
 public class GameFinishScreen implements Screen {
 
@@ -35,6 +38,9 @@ public class GameFinishScreen implements Screen {
 	public GameFinishScreen(Main game) {
 		super();
 		this.game = game;
+		GamePreferences.guardarRun(Time.times, TimeManager.timeLeft);
+		Time.times = 0;
+		TimeManager.timeLeft = 5*60;
 		viewport = new StretchViewport(1920, 1080, new OrthographicCamera());
 		stage = new Stage(viewport, ((Main) game).batch);
 		Gdx.input.setInputProcessor(stage);

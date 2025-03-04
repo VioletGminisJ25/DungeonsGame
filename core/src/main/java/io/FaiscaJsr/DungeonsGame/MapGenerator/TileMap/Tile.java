@@ -34,7 +34,7 @@ public abstract class Tile extends Entity{
 
 	@Override
 	public void update(float dt) {
-		// TODO Auto-generated method stub
+		
 	}
 
 }

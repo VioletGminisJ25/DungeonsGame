@@ -81,8 +81,10 @@ public class Heart extends Sprite {
 	}
 
 	public void destroy() {
-
+		// PlayScreen.world.destroyBody(body);
+		// body = null;
 		Heart.hearts.remove(this);
+		PlayScreen.bodiesToRemove.add(body);
 	}
 
 }

@@ -110,6 +110,7 @@ public class Slimes extends Enemy {
 	}
 
 	private int deathcont = 0;
+	private int attackcont = 0;
 
 	private TextureRegion getFrame(float delta) {
 		currentState = getState();
@@ -134,6 +135,12 @@ public class Slimes extends Enemy {
 
 				break;
 			case attack:
+				if (attackcont == 0) {
+					Sound sound = ManagerAudio.getSound("fsx/slimes/slime_swallow_1.wav");
+					screen.game.playSound(sound);
+
+					attackcont++;
+				}
 				region = attack.getKeyFrame(stateTimer, true);
 				break;
 			case move:
@@ -259,7 +266,7 @@ public class Slimes extends Enemy {
 	}
 
 	private void dropItem() {
-
+		System.out.println("bb");
 		Vector2 dropPosition = new Vector2(this.getX(), this.getY());
 
 		if (random.nextInt(100) < 20) { // 10% de probabilidad de soltar un Heart

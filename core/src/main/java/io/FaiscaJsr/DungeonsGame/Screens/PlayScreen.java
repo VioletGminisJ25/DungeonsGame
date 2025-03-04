@@ -1,5 +1,7 @@
 package io.FaiscaJsr.DungeonsGame.Screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -51,13 +54,12 @@ public class PlayScreen implements Screen {
 	private BspTree tree;
 	private Hud hud;
 
-
 	public TextureAtlas getTextureAtlas() {
 		return textureAtlas;
 	}
 
 	public TimeManager timeManager;
-
+	public static  ArrayList<Body> bodiesToRemove = new ArrayList<>();
 
 	public PlayScreen(Main game) {
 		super();
@@ -84,7 +86,6 @@ public class PlayScreen implements Screen {
 		System.out.println("Rooms: " + BspTree.rooms.size());
 
 		timeManager = new TimeManager(this);
-
 
 	}
 
@@ -170,6 +171,11 @@ public class PlayScreen implements Screen {
 		}
 
 		Enemy.enemiesToRemove.clear();
+
+		for (Body body : bodiesToRemove) {
+			world.destroyBody(body);
+		}
+		bodiesToRemove.clear();
 
 		player.update(delta);
 		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);

@@ -23,6 +23,7 @@ public class ManagerAudio {
 		loadSound("fsx/slimeKing/SlimeKing_Hit.wav");
 		loadSound("fsx/slimes/death_slime_1.wav");
 		loadSound("fsx/slimes/slime_jump_1.wav");
+		loadSound("fsx/slimes/slime_swallow_1.wav");
 		loadMusic("MainMenu/sound/menuMusic.wav");
 	}
 
