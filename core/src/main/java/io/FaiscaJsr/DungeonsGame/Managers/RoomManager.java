@@ -37,7 +37,7 @@ public class RoomManager {
 	}
 
 	public void createEnemies() {
-		enemyCantSpawn = rnd.nextInt(1, 2);
+		enemyCantSpawn = rnd.nextInt(1, 15);
 
 		for (int i = 0; i < enemyCantSpawn; i++) {
 			Slimes slime = new Slimes(player, playScreen, PlayScreen.world,
@@ -46,7 +46,7 @@ public class RoomManager {
 									/ 3),
 					rnd.nextFloat(room.center.y - room.getHeight() * 32 / 3,
 							room.center.y + room.getHeight() * 32 / 3),
-					20, 1f, 1f, rnd.nextInt(7));
+					35, 1f, 1f, rnd.nextInt(7));
 			room.enemies.add(slime);
 			enemiesAlive.add(slime);
 		}

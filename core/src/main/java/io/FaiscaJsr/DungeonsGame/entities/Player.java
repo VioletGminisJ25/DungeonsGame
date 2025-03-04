@@ -1,5 +1,6 @@
 package io.FaiscaJsr.DungeonsGame.entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -22,6 +23,14 @@ public class Player extends Sprite implements Disposable {
 	};
 
 	private int currentHealth;
+	public int getCurrentHealth() {
+		return currentHealth;
+	}
+
+	public void setCurrentHealth(int currentHealth) {
+		this.currentHealth = currentHealth;
+	}
+
 	private int maxHealth;
 	private float damage;
 	private float speed;
@@ -57,6 +66,7 @@ public class Player extends Sprite implements Disposable {
 	public boolean isIsattack() {
 		return isattack;
 	}
+	private PlayScreen screen;
 
 	public Player(World world, PlayScreen screen, VirtualJoystick virtualJoystick) {
 		super();
@@ -66,6 +76,7 @@ public class Player extends Sprite implements Disposable {
 		currentHealth = maxHealth;
 		isDead = false;
 		game = screen.game;
+		this.screen = screen;
 
 		idleRegion = new TextureRegion(screen.getTextureAtlas().findRegion("idle"), 0, 0, 100, 100);
 		setRegion(idleRegion);
@@ -289,8 +300,19 @@ public class Player extends Sprite implements Disposable {
 	}
 
 	public void hit(int damage) {
+		Gdx.input.vibrate(100);
 		currentHealth = currentHealth - damage;
 		isHit = true;
 	}
+
+    public void pickupHeart() {
+        if (currentHealth < maxHealth) {
+			currentHealth+=10;
+		}
+    }
+
+    public void pickupTime() {
+        screen.timeManager.setTimeLeft(screen.timeManager.getTimeLeft()+20);
+    }
 
 }

@@ -84,7 +84,7 @@ public class SettingsScreen implements Screen {
         Table rightColumn = new Table();
 
         Label volumeLabel = new Label("Volume", new Label.LabelStyle(font, Color.WHITE));
-        Slider volumeSlider = new Slider(0, 1, 0.1f, false, sliderStyle);
+        Slider volumeSlider = new Slider(0, 1, 0.01f, false, sliderStyle);
         volumeSlider.setValue(GamePreferences.getMusicVolume());
         volumeSlider.addListener(new ChangeListener() {
             @Override
@@ -108,13 +108,13 @@ public class SettingsScreen implements Screen {
                     vibrationButton.setText("On");
                 } else {
                     vibrationButton.setText("Off");
-                }
+                } // TODO:Vibration
             }
         });
 
         Label languageLabel = new Label("Language", new Label.LabelStyle(font, Color.WHITE));
         TextButton languageButton = new TextButton("English", buttonStyle);
-        //TODO: Implement language button functionality
+        // TODO: Implement language button functionality
         languageButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -122,7 +122,7 @@ public class SettingsScreen implements Screen {
             }
         });
         Label SfxLabel = new Label("Sfx", new Label.LabelStyle(font, Color.WHITE));
-        Slider sfxSlider = new Slider(0, 1, 0.1f, false, sliderStyle);
+        Slider sfxSlider = new Slider(0, 1, 0.01f, false, sliderStyle);
         sfxSlider.setValue(GamePreferences.getSoundVolume());
         sfxSlider.addListener(new ChangeListener() {
             @Override
@@ -165,7 +165,7 @@ public class SettingsScreen implements Screen {
 
         // Centrar el botón "Back" en su propia fila
         TextButton creditsButton = new TextButton("Credits", buttonStyle);
-        //TODO: Implement credits button functionality
+        // TODO: Implement credits button functionality
         creditsButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
@@ -174,7 +174,7 @@ public class SettingsScreen implements Screen {
         });
 
         TextButton helpButton = new TextButton("Help", buttonStyle);
-        //TODO: Implement help button functionality
+        // TODO: Implement help button functionality
         helpButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {

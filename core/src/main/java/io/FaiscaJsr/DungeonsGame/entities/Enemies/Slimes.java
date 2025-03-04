@@ -2,6 +2,7 @@ package io.FaiscaJsr.DungeonsGame.entities.Enemies;
 
 import java.util.Random;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -14,10 +15,13 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
+import io.FaiscaJsr.DungeonsGame.Managers.ManagerAudio;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
+import io.FaiscaJsr.DungeonsGame.entities.Items.Heart;
+import io.FaiscaJsr.DungeonsGame.entities.Items.Time;
 
-public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA xD
+public class Slimes extends Enemy {
 	private World world;
 	private Random random;
 
@@ -45,7 +49,7 @@ public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA x
 
 	public Slimes(Player player, PlayScreen screen, World world, float x, float y, int maxHealth,
 			float damage, float speed, int color) {
-		super(player, world, new Texture("slimes/atlas/Slimes.png"), x, y, maxHealth, damage, speed);
+		super(player, world, new Texture("slimes/atlas/Slimes.png"), x, y, maxHealth, damage, speed, screen);
 		setBounds(x, y, 240 / PlayScreen.PPM, 216 / PlayScreen.PPM);
 		this.screen = screen;
 		this.world = world;
@@ -89,6 +93,24 @@ public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA x
 		jump = new Animation<TextureRegion>(0.15f, jumpArray);
 	}
 
+	private float stepTimer = 0f;
+	private float stepInterval = 1.65f;
+	private Sound sound = ManagerAudio.getSound("fsx/slimes/slime_jump_1.wav");
+
+	private void updateSounds(float dt) {
+		if (!body.getLinearVelocity().isZero()) {
+			stepTimer += dt;
+			if (stepTimer >= stepInterval) {
+				stepTimer = 0;
+				screen.game.playSound(sound);
+			}
+		} else {
+			stepTimer = 0;
+		}
+	}
+
+	private int deathcont = 0;
+
 	private TextureRegion getFrame(float delta) {
 		currentState = getState();
 		TextureRegion region;
@@ -98,6 +120,12 @@ public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA x
 				region = idle.getKeyFrame(stateTimer, true);
 				break;
 			case dead:
+				if (deathcont == 0) {
+
+					Sound sound = ManagerAudio.getSound("fsx/slimes/death_slime_1.wav");
+					screen.game.playSound(sound);
+					deathcont++;
+				}
 				region = dead.getKeyFrame(stateTimer);
 				setDestroyed(true);
 				break;
@@ -153,43 +181,51 @@ public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA x
 		}
 	}
 
+	private int cantDrop = 0;
+
 	@Override
 	public void update(float dt) {
 		super.update(dt);
 		if (body != null) {
 			setPosition(body.getPosition().x - getWidth() / 2 + 3, body.getPosition().y - getHeight() / 2);
 			changeState(dt);
+			updateSounds(dt);
 		}
-			setRegion(getFrame(dt));
-			if (getCurrentHealth() <= 0) {
-				isDead = true;
-			}
-			if (isDead) {
-				if (dead.isAnimationFinished(stateTimer)) {
-					enemyDead = true;
+		setRegion(getFrame(dt));
+		if (getCurrentHealth() <= 0) {
+			isDead = true;
+		}
+		if (isDead) {
+			if (dead.isAnimationFinished(stateTimer)) {
+				if (cantDrop == 0) {
+					dropItem(); // Llamamos al método para dropear el objeto
+					cantDrop++;
 				}
+
+				enemyDead = true;
 			}
-			if (hit.isAnimationFinished(stateTimer)) {
-				setHit(false);
-			}
-			if (attack.isAnimationFinished(stateTimer)) {
-				ishitPlayer = false;
-			}
+		}
+		if (hit.isAnimationFinished(stateTimer)) {
+			setHit(false);
+		}
+		if (attack.isAnimationFinished(stateTimer)) {
+			ishitPlayer = false;
+		}
 	}
-		
+
 	public void changeState(float dt) {
 		if (screen.player.body.getPosition().dst(body.getPosition()) >= 100 && screen.player.body.getPosition()
 				.dst(body.getPosition()) <= 150) {
 			body.setLinearVelocity(
 					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(5000).scl(dt)));
-					moving = true;
+			moving = true;
 		} else if (screen.player.body.getPosition().dst(body.getPosition()) <= 100) {
 			body.setLinearVelocity(
 					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(3000).scl(dt)));
-					moving = true;
-				} else {
-					moving = false;
-				}
+			moving = true;
+		} else {
+			moving = false;
+		}
 	}
 
 	@Override
@@ -220,6 +256,21 @@ public class Slimes extends Enemy {// TODO CORREGIR ANIMACION DE HIT RAQUITICA x
 		body.createFixture(fixtureDef).setUserData(this);
 		edgeShape.dispose();
 
+	}
+
+	private void dropItem() {
+
+		Vector2 dropPosition = new Vector2(this.getX(), this.getY());
+
+		if (random.nextInt(100) < 20) { // 10% de probabilidad de soltar un Heart
+			Heart heart = new Heart(dropPosition.x, dropPosition.y);
+			Heart.hearts.add(heart);
+			System.out.println("Dropped a Heart!");
+		} else if (random.nextInt(100) < 10) { // 10% de probabilidad de soltar un Time
+			Time time = new Time(dropPosition.x, dropPosition.y);
+			Time.time.add(time);
+			System.out.println("Dropped a Time!");
+		}
 	}
 
 }

@@ -2,7 +2,8 @@ package io.FaiscaJsr.DungeonsGame.entities.Enemies.Bosses;
 
 import java.util.Random;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,6 +16,8 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
+import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.ManagerAudio;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
 import io.FaiscaJsr.DungeonsGame.entities.Enemies.Enemy;
@@ -33,7 +36,9 @@ public class SlimeKing extends Enemy {
 	private float period = 0.5f;
 	private boolean moving;
 	PlayScreen screen;
+	private Player player;
 	public boolean nohit = false;
+	private static Music sound = ManagerAudio.getMusic("fsx/slimeKing/walk_slime.wav");
 
 	enum State {
 		wander, attack, dead, idle, hit
@@ -46,11 +51,12 @@ public class SlimeKing extends Enemy {
 
 	public SlimeKing(Player player, PlayScreen screen, World world, float x, float y, int maxHealth, float damage,
 			float speed) {
-		super(player, world, new Texture("Bosses/SlimeKing/SlimeKing_Walk_0.png"), x, y, maxHealth, damage, speed);
+		super(player, world, new Texture("Bosses/SlimeKing/SlimeKing_Walk_0.png"), x, y, maxHealth, damage, speed,screen);
 		setBounds(x, y, 340 / PlayScreen.PPM, 340 / PlayScreen.PPM);
 		this.screen = screen;
 		this.world = world;
 		this.moving = false;
+		this.player = player;
 		createBody(x, y);
 		runningRight = true;
 		random = new Random();
@@ -70,16 +76,18 @@ public class SlimeKing extends Enemy {
 
 		Array<TextureRegion> wanderRegions = new Array<TextureRegion>();
 		for (int i = 0; i < 4; i++) {
-			wanderRegions.add(new TextureRegion(atlas.findRegion("wander"),  0,i * 320, 320, 320));
+			wanderRegions.add(new TextureRegion(atlas.findRegion("wander"), 0, i * 320, 320, 320));
 		}
 		wander = new Animation<TextureRegion>(0.15f, wanderRegions);
 
 		Array<TextureRegion> hitRegions = new Array<TextureRegion>();
 		for (int i = 0; i < 2; i++) {
-			hitRegions.add(new TextureRegion(atlas.findRegion("hit"),  0,i * 320, 320, 320));
+			hitRegions.add(new TextureRegion(atlas.findRegion("hit"), 0, i * 320, 320, 320));
 		}
 		hit = new Animation<TextureRegion>(0.15f, hitRegions);
 	}
+
+	int contSoundDeath = 0;
 
 	private TextureRegion getFrame(float delta) {
 		currentState = getState();
@@ -88,8 +96,14 @@ public class SlimeKing extends Enemy {
 			case idle:
 			case wander:
 				region = wander.getKeyFrame(stateTimer, true);
+
 				break;
 			case dead:
+				if (contSoundDeath == 0) {
+					Sound deathSound = ManagerAudio.getSound("fsx/slimeKing/SlimeKing_Death.wav");
+					screen.game.playSound(deathSound);
+					contSoundDeath++;
+				}
 				region = dead.getKeyFrame(stateTimer, false);
 				setDestroyed(true);
 
@@ -123,6 +137,24 @@ public class SlimeKing extends Enemy {
 		return region;
 	}
 
+	private float stepTimer = 0f;
+	private float stepInterval = 0.3f;
+
+	private void updateSounds(float dt) {
+		if (!body.getLinearVelocity().isZero()) {
+			stepTimer += dt;
+			if (stepTimer >= stepInterval) {
+				stepTimer = 0;
+				if (!sound.isPlaying()) {
+
+					screen.game.playMusic(sound, false);
+				}
+			}
+		} else {
+			stepTimer = 0;
+		}
+	}
+
 	private State getState() {
 		if (isDead) {
 			return State.dead;
@@ -134,9 +166,9 @@ public class SlimeKing extends Enemy {
 			return State.attack;
 		}
 		if (moving) {
+			
 			return State.wander;
 		}
-
 		return State.idle;
 
 	}
@@ -144,11 +176,12 @@ public class SlimeKing extends Enemy {
 	@Override
 	public void update(float dt) {
 		super.update(dt);
-		if (body!=null) {
+		if (body != null) {
 			setPosition(body.getPosition().x - getWidth() / 2 + 3, body.getPosition().y - getHeight() / 2);
 			changeState(dt);
+			updateSounds(dt);
 		}
-			setRegion(getFrame(dt));
+		setRegion(getFrame(dt));
 		if (getCurrentHealth() <= 0) {
 			isDead = true;
 		}
@@ -159,7 +192,7 @@ public class SlimeKing extends Enemy {
 			}
 		}
 		if (hit.isAnimationFinished(stateTimer)) {
-			if(ishit()){
+			if (ishit()) {
 				setHit(false);
 			}
 		}
@@ -167,14 +200,15 @@ public class SlimeKing extends Enemy {
 	}
 
 	public void changeState(float dt) {
-		if (screen.player.body.getPosition().dst(body.getPosition()) > 100 &&screen.player.body.getPosition().dst(body.getPosition()) <= 150) {
+		if (screen.player.body.getPosition().dst(body.getPosition()) > 100
+				&& screen.player.body.getPosition().dst(body.getPosition()) <= 150) {
 			body.setLinearVelocity(
 					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(3000).scl(dt)));
-					moving = true;
+			moving = true;
 		} else if (screen.player.body.getPosition().dst(body.getPosition()) <= 100) {
 			body.setLinearVelocity(
 					new Vector2(screen.player.body.getPosition().sub(body.getPosition()).nor().scl(1000).scl(dt)));
-					moving = true;
+			moving = true;
 		} else {
 			moving = false;
 		}
@@ -200,16 +234,11 @@ public class SlimeKing extends Enemy {
 		fixtureDef = new FixtureDef();
 		PolygonShape edgeShape = new PolygonShape();
 		edgeShape.setAsBox(100 / PlayScreen.PPM, 100 / PlayScreen.PPM);
-		// edgeShape.set(new Vector2[] {
-		// new Vector2(-100 / PlayScreen.PPM, 100 / PlayScreen.PPM),
-		// new Vector2(100 / PlayScreen.PPM, 100 / PlayScreen.PPM),
-		// new Vector2(-100 / PlayScreen.PPM, -100 / PlayScreen.PPM),
-		// new Vector2(100 / PlayScreen.PPM, -100 / PlayScreen.PPM)
-		// });
 		fixtureDef.shape = edgeShape;
 		fixtureDef.isSensor = true;
 		fixtureDef.filter.categoryBits = PlayScreen.ENEMY_BIT_MASK;
-		fixtureDef.filter.maskBits = PlayScreen.ATTACK_BIT_MASK | PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK | PlayScreen.WALL_BIT_MASK | PlayScreen.ENEMY_BIT_MASK | PlayScreen.REVERSE_GOAL_BIT_MASK;
+		fixtureDef.filter.maskBits = PlayScreen.ATTACK_BIT_MASK | PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK
+				| PlayScreen.WALL_BIT_MASK | PlayScreen.ENEMY_BIT_MASK | PlayScreen.REVERSE_GOAL_BIT_MASK;
 		body.createFixture(fixtureDef).setUserData(this);
 		edgeShape.dispose();
 	}

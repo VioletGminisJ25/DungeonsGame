@@ -11,6 +11,8 @@ import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.ReverseGoal;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
 import io.FaiscaJsr.DungeonsGame.entities.Enemies.Enemy;
+import io.FaiscaJsr.DungeonsGame.entities.Items.Heart;
+import io.FaiscaJsr.DungeonsGame.entities.Items.Time;
 
 public class WorldContactListener implements ContactListener {
 
@@ -71,8 +73,31 @@ public class WorldContactListener implements ContactListener {
 					}
 				}
 				break;
+			case PlayScreen.PLAYER_BIT_MASK | PlayScreen.ITEM_BIT_MASK:
+				if (fixtureB.getUserData() != null) {
+					if (fixtureA.getFilterData().categoryBits == PlayScreen.PLAYER_BIT_MASK) {
+						System.out.println("HEART");
+						if (fixtureB.getUserData().getClass() == Heart.class) {
+							((Player) fixtureB.getUserData()).pickupHeart();
+							((Heart) fixtureA.getUserData()).destroy();
+						} else if (fixtureA.getUserData().getClass() == Time.class) {
+							((Player) fixtureB.getUserData()).pickupTime();
+							((Time) fixtureA.getUserData()).destroy();
+						}
+					} else {
+						if (fixtureA.getUserData().getClass() == Heart.class) {
+							System.out.println("HEART");
 
-			// Y aqui el caso del ataque no me seas
+							((Player) fixtureA.getUserData()).pickupHeart();
+							((Heart) fixtureB.getUserData()).destroy();
+						} else if (fixtureB.getUserData().getClass() == Time.class) {
+							((Player) fixtureA.getUserData()).pickupTime();
+							((Time) fixtureB.getUserData()).destroy();
+						}
+					}
+				}
+
+				// Y aqui el caso del ataque no me seas
 
 			default:
 				// System.out.println("DEFUAULT");

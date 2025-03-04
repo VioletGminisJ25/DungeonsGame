@@ -3,7 +3,7 @@ package io.FaiscaJsr.DungeonsGame.entities.Enemies;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,6 +11,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 
+import io.FaiscaJsr.DungeonsGame.Managers.ManagerAudio;
+import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
 
 public abstract class Enemy extends Sprite implements Disposable {
@@ -86,10 +88,11 @@ public abstract class Enemy extends Sprite implements Disposable {
 		this.speed = speed;
 	}
 
-    public static List<Enemy> enemiesToRemove = new ArrayList<>();
+	public static List<Enemy> enemiesToRemove = new ArrayList<>();
+	private PlayScreen screen;
 
 	protected Enemy(Player player, World world, Texture texture, float x, float y, int maxHealth, float damage,
-			float speed) {
+			float speed, PlayScreen screen) {
 		super(texture);
 		this.currentHealth = maxHealth;
 		this.maxHealth = maxHealth;
@@ -97,6 +100,7 @@ public abstract class Enemy extends Sprite implements Disposable {
 		this.speed = speed;
 		this.world = world;
 		this.player = player;
+		this.screen = screen;
 		destroyed = false;
 		enemyDead = false;
         ishit = false;
@@ -122,6 +126,8 @@ public abstract class Enemy extends Sprite implements Disposable {
 	public abstract void createBody(float x, float y);
 
 	public void hit(int damage, float delta) {
+		Sound sound = ManagerAudio.getSound("fsx/slimeKing/SlimeKing_Hit.wav"); //TODO: Cambiar pitch mas agudo a los pequeños
+		screen.game.playSound(sound);
 		currentHealth = currentHealth - damage;
 		ishit = true;
 	}

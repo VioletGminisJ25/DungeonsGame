@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
-import io.FaiscaJsr.DungeonsGame.Managers.AssetsManager;
 
 public class MainMenuScreen implements Screen {
 
@@ -35,7 +34,7 @@ public class MainMenuScreen implements Screen {
 		super();
 		this.game = game;
 
-		game.playMusic("MainMenu/sound/menuMusic.wav", true);
+		
 
 		viewport = new StretchViewport(1920, 1080, new OrthographicCamera());
 		stage = new Stage(viewport, ((Main) game).batch);
@@ -87,6 +86,7 @@ public class MainMenuScreen implements Screen {
 		optionsButton.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				
 				game.setScreen(new SettingsScreen(game));
 				dispose();
 			}
@@ -107,7 +107,7 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void show() {
-
+		game.playMusic("MainMenu/sound/menuMusic.wav", true);
 	}
 
 	@Override

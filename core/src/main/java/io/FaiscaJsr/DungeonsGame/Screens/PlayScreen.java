@@ -16,12 +16,16 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.TimeManager;
 import io.FaiscaJsr.DungeonsGame.MapGenerator.BspTree;
 import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Tile;
 import io.FaiscaJsr.DungeonsGame.Tools.WorldContactListener;
+import io.FaiscaJsr.DungeonsGame.UI.Hud;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
 import io.FaiscaJsr.DungeonsGame.entities.VirtualJoystick;
 import io.FaiscaJsr.DungeonsGame.entities.Enemies.Enemy;
+import io.FaiscaJsr.DungeonsGame.entities.Items.Heart;
+import io.FaiscaJsr.DungeonsGame.entities.Items.Time;
 
 public class PlayScreen implements Screen {
 
@@ -45,10 +49,15 @@ public class PlayScreen implements Screen {
 	public VirtualJoystick virtualJoystick;
 	private Stage stage;
 	private BspTree tree;
+	private Hud hud;
+
 
 	public TextureAtlas getTextureAtlas() {
 		return textureAtlas;
 	}
+
+	public TimeManager timeManager;
+
 
 	public PlayScreen(Main game) {
 		super();
@@ -64,6 +73,7 @@ public class PlayScreen implements Screen {
 		virtualJoystick = new VirtualJoystick(0, 0, 20, 12);
 		player = new Player(world, this, virtualJoystick);
 		virtualJoystick.setPlayer(player);
+		hud = new Hud(this, game.batch);
 
 		BspTree bspTree = new BspTree(new Rectangle(0, 0, 3000 / Tile.DIM, 3000 / Tile.DIM), player, this);
 		tree = bspTree.Split(5, bspTree.container);
@@ -72,6 +82,10 @@ public class PlayScreen implements Screen {
 		player.body.setTransform(BspTree.rooms.get(0).playerCoordinatesSpawn, 0);
 		BspTree.rooms.get(0).roomManager.roomInitialized();
 		System.out.println("Rooms: " + BspTree.rooms.size());
+
+		timeManager = new TimeManager(this);
+
+
 	}
 
 	@Override
@@ -87,21 +101,32 @@ public class PlayScreen implements Screen {
 
 		game.batch.begin();
 		BspTree.draw(game.batch);
-		camera.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
+		if (player.body != null) {
+			camera.position.set(player.body.getPosition().x, player.body.getPosition().y, 0);
+		}
+		Time.draw(delta, game.batch);
+		Heart.draw(delta, game.batch);
 		player.draw(game.batch);
+
 		game.batch.end();
 
 		virtualJoystick.render();
 		// debugRenderer.render(world, stage.getCamera().combined);
 		if (player.isDead()) {
 			if (player.death.isAnimationFinished(player.stateTimer)) {
-				GameOverScreen gameOverScreen = new GameOverScreen(game);
-				game.setScreen(gameOverScreen);
-				dispose();
-				System.out.println("Game Over");
+				GameOverScreen();
 			}
 		}
 
+		hud.stage.draw();
+
+	}
+
+	public void GameOverScreen() {
+		GameOverScreen gameOverScreen = new GameOverScreen(game);
+		game.setScreen(gameOverScreen);
+		dispose();
+		System.out.println("Game Over");
 	}
 
 	public void update(float delta) {
@@ -147,12 +172,21 @@ public class PlayScreen implements Screen {
 		Enemy.enemiesToRemove.clear();
 
 		player.update(delta);
+		game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
 		game.batch.setProjectionMatrix(stage.getCamera().combined);
 		camera.update();
+		timeManager.update(delta);
+		hud.updateHud();
 	}
 
 	public void HandleInput(float delta) {
 		player.HandleInput(delta);
+	}
+
+	public void FinishScreen() {
+		GameFinishScreen gameFinishScreen = new GameFinishScreen(game);
+		game.setScreen(gameFinishScreen);
+		dispose();
 	}
 
 	@Override

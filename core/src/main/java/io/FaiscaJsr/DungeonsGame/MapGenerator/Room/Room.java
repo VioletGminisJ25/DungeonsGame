@@ -62,7 +62,7 @@ public class Room implements Disposable{
 	private static Random rnd = new Random();
 	private Player player;
 	public ArrayList<Enemy> enemies;
-	private PlayScreen playScreen;
+	public PlayScreen playScreen;
 	public RoomManager roomManager;
 	
 	public boolean enemiesSpawned;
@@ -201,7 +201,7 @@ public class Room implements Disposable{
 						Floor floor2 = new Floor(initialPosition.x + (i * Tile.DIM), initialPosition.y + (j * Tile.DIM),
 								0);
 						floors.add(floor2);
-						goal = new Goal(initialPosition.x + (i * Tile.DIM / 2),
+						goal = new Goal(this,initialPosition.x + (i * Tile.DIM / 2),
 								initialPosition.y + (j * Tile.DIM), 0, player);
 
 						break;

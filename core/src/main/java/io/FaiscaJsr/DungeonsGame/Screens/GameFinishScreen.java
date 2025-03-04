@@ -85,7 +85,7 @@ public class GameFinishScreen implements Screen {
 				game.setScreen(new MainMenuScreen(game));
 			}
 		});
-		table.debug();
+		// table.debug();
 	}
 
 	@Override
