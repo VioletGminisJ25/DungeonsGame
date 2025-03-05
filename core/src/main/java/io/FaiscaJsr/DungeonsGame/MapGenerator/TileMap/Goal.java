@@ -71,7 +71,7 @@ public class Goal extends Tile {
      * Se verifica si el jugador ha llegado al objetivo.
      */
     public void reachGoal() {
-        if (Player.currentRoom < 2 - 1) {
+        if (Player.currentRoom < BspTree.rooms.size() - 1) {
             if (BspTree.rooms.get(Player.currentRoom).roomManager.finishRoom()) {
                 Gdx.app.postRunnable(() -> {// no entiendo que es xd
                     player.body.setTransform(BspTree.rooms.get(++Player.currentRoom).playerCoordinatesSpawn, 0);

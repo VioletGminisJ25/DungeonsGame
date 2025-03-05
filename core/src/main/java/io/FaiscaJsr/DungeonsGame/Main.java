@@ -16,7 +16,7 @@ import io.FaiscaJsr.DungeonsGame.Tools.GamePreferences;
  */
 public class Main extends Game {
     public SpriteBatch batch;
-    private Music currentMusic;
+    public Music currentMusic;
     private Music currentSound;
 
     /**
@@ -72,17 +72,12 @@ public class Main extends Game {
      * @param loop     Si se debe repetir la música o no.
      */
     public void playMusic(Music newMusic, boolean loop) {
-        if (currentMusic != null) {
-            currentMusic.stop();
-        }
 
-        // Configurar nueva música
-        currentMusic = newMusic;
-        currentMusic.setLooping(loop);
-        updateSoundVolume();
+        newMusic.setLooping(loop);
 
         if (GamePreferences.getSoundVolume() > 0) {
-            currentMusic.play();
+            newMusic.setVolume(GamePreferences.getSoundVolume());
+            newMusic.play();
         }
     }
 

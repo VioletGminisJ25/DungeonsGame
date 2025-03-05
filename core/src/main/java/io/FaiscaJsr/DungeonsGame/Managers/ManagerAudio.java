@@ -25,6 +25,9 @@ public class ManagerAudio {
 		loadSound("fsx/slimes/slime_jump_1.wav");
 		loadSound("fsx/slimes/slime_swallow_1.wav");
 		loadMusic("MainMenu/sound/menuMusic.wav");
+        loadMusic("music/MUS_1.wav");
+        loadMusic("music/MUS_2.wav");
+        loadMusic("music/MUS_3.wav");
 	}
 
 	/**

@@ -1,9 +1,11 @@
 package io.FaiscaJsr.DungeonsGame.Screens;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -43,6 +45,7 @@ public class PlayScreen implements Screen {
     public static final short ITEM_BIT_MASK = 16;
     public static final short ATTACK_BIT_MASK = 32;
     public static final short REVERSE_GOAL_BIT_MASK = 64;
+    private static final String[] MUSIC = {"music/MUS_1.wav", "music/MUS_2.wav", "music/MUS_3.wav"};
     public Main game;
     Texture texture;
     private OrthographicCamera camera;
@@ -58,6 +61,8 @@ public class PlayScreen implements Screen {
     private Hud hud;
     public TimeManager timeManager;
     public static ArrayList<Body> bodiesToRemove = new ArrayList<>();
+    private static Random rnd = new Random();
+    private int currentMusic;
 
     public TextureAtlas getTextureAtlas() {
         return textureAtlas;
@@ -103,6 +108,8 @@ public class PlayScreen implements Screen {
     @Override
     public void show() {
         game.stopMusic();
+        currentMusic = rnd.nextInt(MUSIC.length);
+        game.playMusic(MUSIC[currentMusic],false);
     }
 
     /**
@@ -156,6 +163,14 @@ public class PlayScreen implements Screen {
      * @param delta Tiempo transcurrido desde la última actualización
      */
     public void update(float delta) {
+        if (!game.currentMusic.isPlaying()) {
+            int nextMusic = rnd.nextInt(MUSIC.length);
+            while (currentMusic == nextMusic) {
+                nextMusic = rnd.nextInt(MUSIC.length);
+            }
+            currentMusic = nextMusic;
+            game.playMusic(MUSIC[currentMusic], false);
+        }
         world.step(1 / 60f, 6, 2);
         HandleInput(delta);
 
@@ -176,7 +191,6 @@ public class PlayScreen implements Screen {
 
             }
             Enemy.enemiesToHit.clear();
-
         }
 
         for (Enemy enemy : Enemy.enemiesToRemove) {

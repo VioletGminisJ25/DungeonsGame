@@ -144,7 +144,7 @@ public class Player extends Sprite implements Disposable {
 		for (int i = 0; i < 8; i++) {
 			attackRegions.add(new TextureRegion(screen.getTextureAtlas().findRegion("attack"), 0, i * 39, 126, 39));
 		}
-		attack = new Animation<TextureRegion>(0.07f, attackRegions);
+		attack = new Animation<TextureRegion>(1f, attackRegions);
 
 		Array<TextureRegion> hitRegions = new Array<TextureRegion>();
 		for (int i = 0; i < 2; i++) {
@@ -270,6 +270,9 @@ public class Player extends Sprite implements Disposable {
      * @param delta Tiempo transcurrido desde la última actualización.
      */
 	public void update(float delta) {
+        if(currentHealth>maxHealth){
+            currentHealth=maxHealth;
+        }
 		setPosition(body.getPosition().x - getWidth() / 2 + 3, body.getPosition().y - getHeight());
 		setRegion(getFrame(delta));
 		if (isattack && attack.isAnimationFinished(stateTimer)) {
