@@ -257,6 +257,7 @@ public class Slimes extends Enemy {
         }
         if (attack.isAnimationFinished(stateTimer)) {
             ishitPlayer = false;
+            attackcont = 0;
         }
     }
 

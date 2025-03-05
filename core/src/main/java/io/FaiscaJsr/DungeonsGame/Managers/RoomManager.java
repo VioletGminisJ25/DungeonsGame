@@ -99,7 +99,6 @@ public class RoomManager {
                     createEnemies();
                     rounds++;
                 }
-                System.out.println("Round: " + rounds);
             }
         }
     }

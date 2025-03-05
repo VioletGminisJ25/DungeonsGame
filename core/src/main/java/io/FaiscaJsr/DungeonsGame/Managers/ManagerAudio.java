@@ -28,6 +28,10 @@ public class ManagerAudio {
         loadMusic("music/MUS_1.wav");
         loadMusic("music/MUS_2.wav");
         loadMusic("music/MUS_3.wav");
+        loadSound("player/audio/ATTACK_1.wav");
+        loadSound("player/audio/DEATH.wav");
+        loadSound("player/audio/WALK.wav");
+        loadSound("pick/pickitem.wav");
 	}
 
 	/**
