@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.LanguageManager;
 
 public class GameOverScreen implements Screen {
 	private Viewport viewport;
@@ -73,11 +74,11 @@ public class GameOverScreen implements Screen {
 		table.row();
 
 
-        TextButton playButton = new TextButton("Play Again", estiloBoton);
+        TextButton playButton = new TextButton(LanguageManager.get("again"), estiloBoton);
         playButton.pad(20);
 		table.add(playButton).pad(30);
 		table.row();
-        TextButton exitButton = new TextButton("Exit", estiloBotonExit);
+        TextButton exitButton = new TextButton(LanguageManager.get("back"), estiloBotonExit);
         exitButton.pad(20);
 		table.add(exitButton);
 		stage.addActor(table);

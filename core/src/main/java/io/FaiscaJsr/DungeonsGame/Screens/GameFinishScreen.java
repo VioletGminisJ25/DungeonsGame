@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.LanguageManager;
 import io.FaiscaJsr.DungeonsGame.Managers.TimeManager;
 import io.FaiscaJsr.DungeonsGame.Tools.GamePreferences;
 import io.FaiscaJsr.DungeonsGame.entities.Items.Time;
@@ -35,10 +36,10 @@ public class GameFinishScreen implements Screen {
 	private Sprite background;
 	private BitmapFont font;
 
-	public GameFinishScreen(Main game) {
+	public GameFinishScreen(Main game,PlayScreen screen) {
 		super();
 		this.game = game;
-		GamePreferences.guardarRun(Time.times, TimeManager.timeLeft);
+		GamePreferences.guardarRun(Time.times, screen.timeManager.toString());
 		Time.times = 0;
 		TimeManager.timeLeft = 5*60;
 		viewport = new StretchViewport(1920, 1080, new OrthographicCamera());
@@ -72,13 +73,13 @@ public class GameFinishScreen implements Screen {
 		table.setFillParent(true);
 		table.center();
 
-		Label title = new Label("You Win", labelStyle);
+		Label title = new Label(LanguageManager.get("win"), labelStyle);
 		title.setAlignment(Align.center);
 		table.add(title).size(400, 400).center();
 
 		table.row();
 
-		TextButton exitButton = new TextButton("Exit",
+		TextButton exitButton = new TextButton(LanguageManager.get("back"),
 				estiloBotonExit);
 		exitButton.pad(20);
 		table.add(exitButton);

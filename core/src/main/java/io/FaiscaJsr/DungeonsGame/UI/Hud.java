@@ -40,7 +40,7 @@ public class Hud implements Disposable {
 
 	/**
 	 * Constructor del HUD.
-	 * 
+	 *
 	 * @param batch SpriteBatch utilizado para renderizar los elementos del HUD.
 	 */
 	public Hud(PlayScreen screen, SpriteBatch batch) {
@@ -102,7 +102,7 @@ public class Hud implements Disposable {
 
 	public void updateHud() {
 		// Actualiza la visualización de la vida
-		healthLabel.setText(screen.player.getCurrentHealth()); // TODO: Cambiar fuente
+		healthLabel.setText(screen.player.getCurrentHealth());
 		timeLabel.setText(screen.timeManager.toString());
 	}
 

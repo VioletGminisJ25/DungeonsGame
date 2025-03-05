@@ -19,13 +19,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.LanguageManager;
 import io.FaiscaJsr.DungeonsGame.Tools.GamePreferences;
 
 public class SettingsScreen implements Screen {
@@ -83,7 +83,7 @@ public class SettingsScreen implements Screen {
         Table leftColumn = new Table();
         Table rightColumn = new Table();
 
-        Label volumeLabel = new Label("Volume", new Label.LabelStyle(font, Color.WHITE));
+        Label volumeLabel = new Label(LanguageManager.get("music"), new Label.LabelStyle(font, Color.WHITE));
         Slider volumeSlider = new Slider(0, 1, 0.01f, false, sliderStyle);
         volumeSlider.setValue(GamePreferences.getMusicVolume());
         volumeSlider.addListener(new ChangeListener() {
@@ -96,7 +96,7 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        Label vibrationLabel = new Label("Vibration", new Label.LabelStyle(font, Color.WHITE));
+        Label vibrationLabel = new Label(LanguageManager.get("vibration"), new Label.LabelStyle(font, Color.WHITE));
         TextButton vibrationButton = new TextButton("On", buttonStyle);
         vibrationButton.setText(GamePreferences.isVibrationEnabled() ? "On" : "Off");
         vibrationButton.addListener(new ClickListener() {
@@ -112,16 +112,22 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        Label languageLabel = new Label("Language", new Label.LabelStyle(font, Color.WHITE));
-        TextButton languageButton = new TextButton("English", buttonStyle);
-        // TODO: Implement language button functionality
+        Label languageLabel = new Label(LanguageManager.get("language"), new Label.LabelStyle(font, Color.WHITE));
+        TextButton languageButton = new TextButton(GamePreferences.getLanguage().equals("en") ? "English" : "Español", buttonStyle);
         languageButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                String nuevoIdioma = GamePreferences.getLanguage().equals("es") ? "en" : "es";
+                GamePreferences.setLanguage(nuevoIdioma);
+                LanguageManager.setLanguage(nuevoIdioma);
+                LanguageManager.loadLanguage();
 
+                // Recargar la pantalla con el nuevo idioma
+                game.setScreen(new SettingsScreen(game));
+                dispose();
             }
         });
-        Label SfxLabel = new Label("Sfx", new Label.LabelStyle(font, Color.WHITE));
+        Label SfxLabel = new Label(LanguageManager.get("sfx"), new Label.LabelStyle(font, Color.WHITE));
         Slider sfxSlider = new Slider(0, 1, 0.01f, false, sliderStyle);
         sfxSlider.setValue(GamePreferences.getSoundVolume());
         sfxSlider.addListener(new ChangeListener() {
@@ -133,7 +139,7 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        TextButton backButton = new TextButton("Back", buttonStyle);
+        TextButton backButton = new TextButton(LanguageManager.get("back"), buttonStyle);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
@@ -164,21 +170,21 @@ public class SettingsScreen implements Screen {
         table.row();
 
         // Centrar el botón "Back" en su propia fila
-        TextButton creditsButton = new TextButton("Credits", buttonStyle);
-        // TODO: Implement credits button functionality
+        TextButton creditsButton = new TextButton(LanguageManager.get("credits"), buttonStyle);
         creditsButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                // Código para ir a la pantalla de Créditos
+                game.setScreen(new CreditsScreen(game));
+                dispose();
             }
         });
 
-        TextButton helpButton = new TextButton("Help", buttonStyle);
-        // TODO: Implement help button functionality
+        TextButton helpButton = new TextButton(LanguageManager.get("help"), buttonStyle);
         helpButton.addListener(new ClickListener() {
             @Override
             public void clicked(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y) {
-                // Código para ir a la pantalla de Ayuda
+                game.setScreen(new HelpScreen(game));
+                dispose();
             }
         });
 

@@ -21,8 +21,7 @@ public class WorldContactListener implements ContactListener {
 		Fixture fixtureA = contact.getFixtureA();
 		Fixture fixtureB = contact.getFixtureB();
 		int sbit = fixtureA.getFilterData().categoryBits | fixtureB.getFilterData().categoryBits;
-		// System.out.println("A:"+fixtureA.getFilterData().categoryBits);
-		// System.out.println("B:"+fixtureB.getFilterData().categoryBits);
+
 		switch (sbit) {
 			case PlayScreen.PLAYER_BIT_MASK | PlayScreen.GOAL_BIT_MASK:
 				if (fixtureB.getUserData() != null) {
@@ -33,8 +32,7 @@ public class WorldContactListener implements ContactListener {
 					}
 				}
 				break;
-			case PlayScreen.ATTACK_BIT_MASK | PlayScreen.ENEMY_BIT_MASK: // Si el player choca con el enemigo deberia
-																			// recibir daño
+			case PlayScreen.ATTACK_BIT_MASK | PlayScreen.ENEMY_BIT_MASK:
 				Enemy enemy = null;
 
 				if (fixtureA.getFilterData().categoryBits == PlayScreen.ENEMY_BIT_MASK) {
@@ -43,9 +41,8 @@ public class WorldContactListener implements ContactListener {
 					enemy = (Enemy) fixtureB.getUserData();
 				}
 
-				// Asegurarse de que enemy es un enemigo válido y que no está en la lista (cual)
+
 				if (enemy != null && !Enemy.enemiesToHit.contains(enemy)) {
-					// System.out.println("Enemy added: " + enemy);
 					Enemy.enemiesToHit.add(enemy);
 
 				}
@@ -76,7 +73,6 @@ public class WorldContactListener implements ContactListener {
 			case PlayScreen.PLAYER_BIT_MASK | PlayScreen.ITEM_BIT_MASK:
 				if (fixtureB.getUserData() != null) {
 					if (fixtureA.getFilterData().categoryBits == PlayScreen.PLAYER_BIT_MASK) {
-						System.out.println("HEART");
 						if (fixtureB.getUserData().getClass() == Heart.class) {
 							((Player) fixtureA.getUserData()).pickupHeart();
 							((Heart) fixtureB.getUserData()).destroy();
@@ -86,7 +82,6 @@ public class WorldContactListener implements ContactListener {
 						}
 					} else {
 						if (fixtureA.getUserData().getClass() == Heart.class) {
-							System.out.println("HEART");
 
 							((Player) fixtureB.getUserData()).pickupHeart();
 							((Heart) fixtureA.getUserData()).destroy();
@@ -97,10 +92,8 @@ public class WorldContactListener implements ContactListener {
 					}
 				}
 
-				// Y aqui el caso del ataque no me seas
 
 			default:
-				// System.out.println("DEFUAULT");
 				break;
 		}
 	}

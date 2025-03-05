@@ -126,7 +126,7 @@ public abstract class Enemy extends Sprite implements Disposable {
 	public abstract void createBody(float x, float y);
 
 	public void hit(int damage, float delta) {
-		Sound sound = ManagerAudio.getSound("fsx/slimeKing/SlimeKing_Hit.wav"); //TODO: Cambiar pitch mas agudo a los pequeños
+		Sound sound = ManagerAudio.getSound("fsx/slimeKing/SlimeKing_Hit.wav"); 
 		screen.game.playSound(sound);
 		currentHealth = currentHealth - damage;
 		ishit = true;

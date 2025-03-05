@@ -163,7 +163,7 @@ public class Player extends Sprite implements Disposable {
 		return region;
 	}
 
-	private State getState() {
+	private State getState() { 
 		if (isDead) {
 			return State.death;
 		} else if (isHit) {

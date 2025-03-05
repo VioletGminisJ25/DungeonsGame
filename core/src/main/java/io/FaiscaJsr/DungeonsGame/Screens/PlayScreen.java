@@ -83,7 +83,6 @@ public class PlayScreen implements Screen {
 		BspTree.rooms.get(0).playerSpawn = true;
 		player.body.setTransform(BspTree.rooms.get(0).playerCoordinatesSpawn, 0);
 		BspTree.rooms.get(0).roomManager.roomInitialized();
-		System.out.println("Rooms: " + BspTree.rooms.size());
 
 		timeManager = new TimeManager(this);
 
@@ -127,24 +126,16 @@ public class PlayScreen implements Screen {
 		GameOverScreen gameOverScreen = new GameOverScreen(game);
 		game.setScreen(gameOverScreen);
 		dispose();
-		System.out.println("Game Over");
 	}
 
 	public void update(float delta) {
 		world.step(1 / 60f, 6, 2);
 		HandleInput(delta);
-		// for (Enemy enemy : Room.enemies) { // FIX: actualiza la lista de enemigos con
-		// cada enemigo = muerte instantanea
-		// // al recibir daño
 
-		// enemy.update(delta);
-
-		// }
 
 		BspTree.rooms.get(Player.currentRoom).roomManager.update(delta);
 
 		if (!Enemy.enemiesToHit.isEmpty()) {
-			// System.out.println("Enemies to hit: " + enemiesToHit.size());
 
 			for (Enemy enemy : Enemy.enemiesToHit) {
 				if (enemy.getCurrentHealth() > 0) {
@@ -190,7 +181,7 @@ public class PlayScreen implements Screen {
 	}
 
 	public void FinishScreen() {
-		GameFinishScreen gameFinishScreen = new GameFinishScreen(game);
+		GameFinishScreen gameFinishScreen = new GameFinishScreen(game,this);
 		game.setScreen(gameFinishScreen);
 		dispose();
 	}

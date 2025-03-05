@@ -105,7 +105,7 @@ public class GamePreferences {
         return getPreferences().getString(LANGUAGE, "es");
     }
 
-    public static void guardarRun(int vecesReloj, float tiempoJugado) {
+    public static void guardarRun(int vecesReloj, String tiempoJugado) {
 
         // Obtener los registros anteriores
         String registrosPrevios = getPreferences().getString(RUNS, "");

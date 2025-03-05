@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.LanguageManager;
 import io.FaiscaJsr.DungeonsGame.Tools.GamePreferences;
 
 public class RecordsScreen implements Screen {
@@ -69,14 +70,14 @@ public class RecordsScreen implements Screen {
         labelStyle = new Label.LabelStyle();
         labelStyle.font = this.font;
 
-        Label title = new Label("Records", labelStyle);
+        Label title = new Label(LanguageManager.get("records"), labelStyle);
         title.setFontScale(2);
         title.setAlignment(Align.center);
 
         table = new Table();
         cargarRecords();
 
-        TextButton btnVolver = new TextButton("Volver", estiloBoton);
+        TextButton btnVolver = new TextButton(LanguageManager.get("back"), estiloBoton);
         btnVolver.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -101,17 +102,16 @@ public class RecordsScreen implements Screen {
         String registros = GamePreferences.getPreferences().getString(GamePreferences.RUNS, "");
 
         if (registros.isEmpty()) {
-            table.add(new Label("No hay records aún.", labelStyle)).pad(10).row();
+            table.add(new Label(LanguageManager.get("norecords"), labelStyle)).pad(10).row();
         } else {
             String[] runs = registros.split(";");
 
             for (int i = 0; i < runs.length; i++) {
                 String[] datos = runs[i].split(",");
                 int vecesReloj = Integer.parseInt(datos[0]);
-                float tiempoJugado = Float.parseFloat(datos[1]);
+                String tiempoJugado = datos[1];
 
-                Label runLabel = new Label("Run " + (i + 1) + ": " + tiempoJugado + "s - Relojes: " + vecesReloj,
-                        labelStyle);
+                Label runLabel = new Label("Run " + (i + 1) + ": " + tiempoJugado + " - " + LanguageManager.get("watch") + ": " + vecesReloj,labelStyle);
                 table.add(runLabel).pad(5).row();
             }
         }

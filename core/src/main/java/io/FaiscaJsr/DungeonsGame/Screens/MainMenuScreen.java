@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.LanguageManager;
 
 public class MainMenuScreen implements Screen {
 
@@ -62,17 +63,15 @@ public class MainMenuScreen implements Screen {
 		table.center().setY(-100);
 		// table.debug();
 		table.row();
-		TextButton startButton = new TextButton("Start Game", estiloBoton);
+		TextButton startButton = new TextButton(LanguageManager.get("start"), estiloBoton);
 		table.add(startButton).pad(20);
 		table.row();
-		TextButton tutorialButton = new TextButton("Tutorial", estiloBoton);
-		table.add(tutorialButton).pad(20);
-		table.row();
-		TextButton optionsButton = new TextButton("Options", estiloBoton);
+		TextButton optionsButton = new TextButton( LanguageManager.get("options"), estiloBoton);
 		table.add(optionsButton).pad(20);
 		table.row();
-		TextButton btnRecords = new TextButton("Records", estiloBoton);
-		btnRecords.setPosition(100, 125);
+		TextButton btnRecords = new TextButton(LanguageManager.get("records"), estiloBoton);
+        table.add(btnRecords).pad(20);
+		table.row();
 		btnRecords.addListener(new ClickListener() {
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
@@ -80,9 +79,9 @@ public class MainMenuScreen implements Screen {
 			}
 		});
 
-		stage.addActor(btnRecords);
+		table.addActor(btnRecords);
 		table.row();
-		TextButton exitButton = new TextButton("Exit", estiloBoton);
+		TextButton exitButton = new TextButton(LanguageManager.get("exit"), estiloBoton);
 		table.add(exitButton).pad(20);
 		startButton.addListener(new ClickListener() {
 			@Override

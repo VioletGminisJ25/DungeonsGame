@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import io.FaiscaJsr.DungeonsGame.Managers.AssetsManager;
+import io.FaiscaJsr.DungeonsGame.Managers.LanguageManager;
 import io.FaiscaJsr.DungeonsGame.Managers.ManagerAudio;
 import io.FaiscaJsr.DungeonsGame.Screens.MainMenuScreen;
 import io.FaiscaJsr.DungeonsGame.Tools.GamePreferences;
@@ -19,12 +20,14 @@ public class Main extends Game {
 	private Music currentMusic;
 	private Music currentSound;
 
+
 	@Override
 	public void create() {
 		ManagerAudio.load();
 		AssetsManager.load();
 		ManagerAudio.finishLoading();
 		AssetsManager.finishLoading();
+        LanguageManager.loadLanguage();
 		batch = new SpriteBatch();
 		setScreen(new MainMenuScreen(this));
 	}

@@ -44,7 +44,6 @@ public class ReverseGoal extends Tile {
     }
 
     public void reachGoal() {
-        System.out.println("Reach ReverseGoal");
 
             if (Player.currentRoom > 0) {
                 Gdx.app.postRunnable(() -> {// no entiendo que es xd

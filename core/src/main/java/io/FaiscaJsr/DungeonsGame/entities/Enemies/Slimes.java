@@ -266,17 +266,14 @@ public class Slimes extends Enemy {
 	}
 
 	private void dropItem() {
-		System.out.println("bb");
 		Vector2 dropPosition = new Vector2(this.getX(), this.getY());
 
 		if (random.nextInt(100) < 20) { // 10% de probabilidad de soltar un Heart
 			Heart heart = new Heart(dropPosition.x, dropPosition.y);
 			Heart.hearts.add(heart);
-			System.out.println("Dropped a Heart!");
 		} else if (random.nextInt(100) < 10) { // 10% de probabilidad de soltar un Time
 			Time time = new Time(dropPosition.x, dropPosition.y);
 			Time.time.add(time);
-			System.out.println("Dropped a Time!");
 		}
 	}
 
