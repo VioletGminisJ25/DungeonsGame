@@ -27,6 +27,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import io.FaiscaJsr.DungeonsGame.Main;
 import io.FaiscaJsr.DungeonsGame.Managers.LanguageManager;
 
+/**
+ * Pantalla de ayuda
+ *
+ */
 public class HelpScreen implements Screen {
     private Main game;
     private Stage stage;
@@ -36,10 +40,15 @@ public class HelpScreen implements Screen {
     private StretchViewport viewport;
     private Sprite background;
 
+    /**
+     * Constructor
+     *
+     * @param game juego
+     */
     public HelpScreen(Main game) {
         this.game = game;
         background = new Sprite(new Texture("GameOver/GameOverBackground.png"));
-		background.setSize(1920, 1080);
+        background.setSize(1920, 1080);
         viewport = new StretchViewport(1920, 1080, new OrthographicCamera());
         stage = new Stage(viewport);
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("GameOver/font2.ttf"));
@@ -93,13 +102,23 @@ public class HelpScreen implements Screen {
         rootTable.add(scrollPane).width(Gdx.graphics.getWidth() * 0.85f).height(Gdx.graphics.getHeight() * 0.6f)
                 .padBottom(30).row();
         rootTable.add(backButton).height(50);
-        
+
     }
 
+    /**
+     * Muestra la pantalla
+     *
+     * @see Screen#show()
+     */
     @Override
     public void show() {
     }
 
+    /**
+     * Muestra la pantalla
+     *
+     * @see Screen#render(float)
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -110,23 +129,48 @@ public class HelpScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Cambia el tamaño de la ventana
+     *
+     * @see Screen#resize(int, int)
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    /**
+     * Pausa la animación
+     *
+     * @see Screen#pause()
+     */
     @Override
     public void pause() {
     }
 
+    /**
+     * Reanuda la animación
+     *
+     * @see Screen#resume()
+     */
     @Override
     public void resume() {
     }
 
+    /**
+     * Oculta la pantalla
+     *
+     * @see Screen#hide()
+     */
     @Override
     public void hide() {
     }
 
+    /**
+     * Libera recursos
+     *
+     * @see Screen#dispose()
+     */
     @Override
     public void dispose() {
         stage.dispose();

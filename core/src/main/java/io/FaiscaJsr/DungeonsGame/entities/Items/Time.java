@@ -18,6 +18,9 @@ import com.badlogic.gdx.utils.Disposable;
 import io.FaiscaJsr.DungeonsGame.Managers.AssetsManager;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 
+/**
+ * Clase que representa el objeto de reloj.
+ */
 public class Time extends Sprite {
 	private Animation<TextureRegion> animation;
 	public static ArrayList<Time> time = new ArrayList<Time>();
@@ -25,6 +28,12 @@ public class Time extends Sprite {
 	private Body body;
 	public static int times = 0;
 
+    /**
+     * Constructor de reloj.
+     * Crea un reloj con un tamaño de 64x64 unidades.
+     * @param x Posición en el eje X.
+     * @param y Posición en el eje Y.
+     */
 	public Time(float x, float y) {
 		super();
 		stateTimer = 0;
@@ -40,6 +49,11 @@ public class Time extends Sprite {
 		body.setTransform(x, y, 0);
 	}
 
+    /**
+     * Método que actualiza el reloj.
+     * @param delta Tiempo transcurrido desde la última actualización.
+     * @return Textura de la animación del reloj.
+     */
 	private TextureRegion getFrame(float delta) {
 		TextureRegion region;
 
@@ -48,6 +62,11 @@ public class Time extends Sprite {
 		return region;
 	}
 
+    /**
+     * Método que dibuja el reloj.
+     * @param delta Tiempo transcurrido desde la última actualización.
+     * @param batch SpriteBatch que se utiliza para dibujar el reloj.
+     */
 	public static void draw(float delta, SpriteBatch batch) {
 		if (time != null || time.size() == 0) {
 			for (Time time : time) {
@@ -57,6 +76,9 @@ public class Time extends Sprite {
 		}
 	}
 
+    /**
+     * Método que crea el cuerpo del reloj.
+     */
 	private void defineBody() {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -84,9 +106,11 @@ public class Time extends Sprite {
 		edgeShape.dispose();
 	}
 
+    /**
+     * Método que destruye el reloj.
+     * Se elimina del ArrayList de reloj y se elimina del mundo.
+     */
 	public void destroy() {
-		// PlayScreen.world.destroyBody(body);
-		// body = null;
 		Time.time.remove(this);
 		PlayScreen.bodiesToRemove.add(body);
 		times++;

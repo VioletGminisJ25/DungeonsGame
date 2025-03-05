@@ -68,7 +68,7 @@ public class ManagerAudio {
 
 	/**
 	 * Libera un archivo de audio específico para optimizar el uso de memoria.
-	 * 
+	 *
 	 * @param fileName Ruta del archivo a liberar.
 	 */
 	public static void unload(String fileName) {
@@ -85,11 +85,10 @@ public class ManagerAudio {
 		manager.dispose();
 	}
 
-	// ---------------------- Métodos privados ----------------------
 
 	/**
 	 * Carga un archivo de música si no ha sido cargado previamente.
-	 * 
+	 *
 	 * @param fileName Ruta del archivo de música.
 	 */
 	private static void loadMusic(String fileName) {
@@ -100,7 +99,7 @@ public class ManagerAudio {
 
 	/**
 	 * Carga un archivo de sonido si no ha sido cargado previamente.
-	 * 
+	 *
 	 * @param fileName Ruta del archivo de sonido.
 	 */
 	private static void loadSound(String fileName) {

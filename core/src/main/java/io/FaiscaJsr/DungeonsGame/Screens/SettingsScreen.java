@@ -28,6 +28,9 @@ import io.FaiscaJsr.DungeonsGame.Main;
 import io.FaiscaJsr.DungeonsGame.Managers.LanguageManager;
 import io.FaiscaJsr.DungeonsGame.Tools.GamePreferences;
 
+/**
+ * Pantalla de configuración
+ */
 public class SettingsScreen implements Screen {
 
     private Viewport viewport;
@@ -39,6 +42,11 @@ public class SettingsScreen implements Screen {
     private boolean isVibrationOn, isMusicOn, isSoundOn;
     private float lastMusicVolume, lastSoundVolume;
 
+    /**
+     * Constructor
+     *
+     * @param game Instancia de Main
+     */
     public SettingsScreen(Main game) {
         this.game = game;
         musicVolume = GamePreferences.getMusicVolume();
@@ -113,7 +121,8 @@ public class SettingsScreen implements Screen {
         });
 
         Label languageLabel = new Label(LanguageManager.get("language"), new Label.LabelStyle(font, Color.WHITE));
-        TextButton languageButton = new TextButton(GamePreferences.getLanguage().equals("en") ? "English" : "Español", buttonStyle);
+        TextButton languageButton = new TextButton(GamePreferences.getLanguage().equals("en") ? "English" : "Español",
+                buttonStyle);
         languageButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -200,10 +209,20 @@ public class SettingsScreen implements Screen {
 
     }
 
+    /**
+     * Muestra la pantalla
+     *
+     * @see Screen#show()
+     */
     @Override
     public void show() {
     }
 
+    /**
+     * Actualiza la pantalla
+     *
+     * @see Screen#render(float)
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -214,23 +233,48 @@ public class SettingsScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Cambia el tamaño de la ventana
+     *
+     * @see Screen#resize(int, int)
+     */
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
     }
 
+    /**
+     * Pausa la animación
+     *
+     * @see Screen#pause()
+     */
     @Override
     public void pause() {
     }
 
+    /**
+     * Reanuda la animación
+     *
+     * @see Screen#resume()
+     */
     @Override
     public void resume() {
     }
 
+    /**
+     * Oculta la pantalla
+     *
+     * @see Screen#hide()
+     */
     @Override
     public void hide() {
     }
 
+    /**
+     * Libera recursos
+     *
+     * @see Screen#dispose()
+     */
     @Override
     public void dispose() {
         stage.dispose();

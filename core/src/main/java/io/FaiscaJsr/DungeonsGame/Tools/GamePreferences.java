@@ -15,7 +15,6 @@ public class GamePreferences {
     private static final String LANGUAGE = "language";
     public static final String RUNS = "runs";
 
-
     private static Preferences prefs;
 
     /**

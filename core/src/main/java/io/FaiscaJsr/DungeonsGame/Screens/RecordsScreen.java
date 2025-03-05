@@ -27,6 +27,10 @@ import io.FaiscaJsr.DungeonsGame.Main;
 import io.FaiscaJsr.DungeonsGame.Managers.LanguageManager;
 import io.FaiscaJsr.DungeonsGame.Tools.GamePreferences;
 
+/**
+ * Pantalla de los Records
+ *
+ */
 public class RecordsScreen implements Screen {
     private final Main game;
     private Stage stage;
@@ -37,10 +41,20 @@ public class RecordsScreen implements Screen {
     private Label.LabelStyle labelStyle;
     private Sprite background;
 
+    /**
+     * Constructor
+     *
+     * @param game Instancia de Main
+     */
     public RecordsScreen(Main game) {
         this.game = game;
     }
 
+    /**
+     * Muestra la pantalla
+     *
+     * @see Screen#show()
+     */
     @Override
     public void show() {
         // GamePreferences.getPreferences().remove(GamePreferences.RUNS);
@@ -94,9 +108,11 @@ public class RecordsScreen implements Screen {
         mainTable.add(btnVolver).pad(10);
 
         stage.addActor(mainTable);
-        // mainTable.debug();
     }
 
+    /**
+     * Carga los registros
+     */
     private void cargarRecords() {
         table.clear();
         String registros = GamePreferences.getPreferences().getString(GamePreferences.RUNS, "");
@@ -111,12 +127,18 @@ public class RecordsScreen implements Screen {
                 int vecesReloj = Integer.parseInt(datos[0]);
                 String tiempoJugado = datos[1];
 
-                Label runLabel = new Label("Run " + (i + 1) + ": " + tiempoJugado + " - " + LanguageManager.get("watch") + ": " + vecesReloj,labelStyle);
+                Label runLabel = new Label("Run " + (i + 1) + ": " + tiempoJugado + " - " + LanguageManager.get("watch")
+                        + ": " + vecesReloj, labelStyle);
                 table.add(runLabel).pad(5).row();
             }
         }
     }
 
+    /**
+     * Actualiza la pantalla
+     *
+     * @see Screen#render(float)
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -127,22 +149,47 @@ public class RecordsScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Cambia el tamaño de la ventana
+     *
+     * @see Screen#resize(int, int)
+     */
     @Override
     public void resize(int width, int height) {
     }
 
+    /**
+     * Pausa la animación
+     *
+     * @see Screen#pause()
+     */
     @Override
     public void pause() {
     }
 
+    /**
+     * Reanuda la animación
+     *
+     * @see Screen#resume()
+     */
     @Override
     public void resume() {
     }
 
+    /**
+     * Oculta la pantalla
+     *
+     * @see Screen#hide()
+     */
     @Override
     public void hide() {
     }
 
+    /**
+     * Libera recursos
+     *
+     * @see Screen#dispose()
+     */
     @Override
     public void dispose() {
         stage.dispose();

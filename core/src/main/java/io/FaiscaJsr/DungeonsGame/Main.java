@@ -12,113 +12,155 @@ import io.FaiscaJsr.DungeonsGame.Screens.MainMenuScreen;
 import io.FaiscaJsr.DungeonsGame.Tools.GamePreferences;
 
 /**
- * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all
- * platforms.
+ * Clase principal del juego.
  */
 public class Main extends Game {
-	public SpriteBatch batch;
-	private Music currentMusic;
-	private Music currentSound;
+    public SpriteBatch batch;
+    private Music currentMusic;
+    private Music currentSound;
 
-
-	@Override
-	public void create() {
-		ManagerAudio.load();
-		AssetsManager.load();
-		ManagerAudio.finishLoading();
-		AssetsManager.finishLoading();
+    /**
+     * Metodo que inicia el juego.
+     *
+     * @see Game#create()
+     */
+    @Override
+    public void create() {
+        ManagerAudio.load();
+        AssetsManager.load();
+        ManagerAudio.finishLoading();
+        AssetsManager.finishLoading();
         LanguageManager.loadLanguage();
-		batch = new SpriteBatch();
-		setScreen(new MainMenuScreen(this));
-	}
+        batch = new SpriteBatch();
+        setScreen(new MainMenuScreen(this));
+    }
 
-	public void playMusic(String musicPath, boolean loop) {
-		Music newMusic = ManagerAudio.getMusic(musicPath);
+    /**
+     * Método que inicia la música.
+     *
+     * @param musicPath Ruta del archivo de la música.
+     * @param loop      Si se debe repetir la música o no.
+     */
+    public void playMusic(String musicPath, boolean loop) {
+        Music newMusic = ManagerAudio.getMusic(musicPath);
 
-		// Si es la misma música, solo actualizar volumen
-		if (currentMusic == newMusic && currentMusic.isPlaying()) {
-			updateMusicVolume();
-			return;
-		}
+        // Si es la misma música, solo actualizar volumen
+        if (currentMusic == newMusic && currentMusic.isPlaying()) {
+            updateMusicVolume();
+            return;
+        }
 
-		// Detener la música anterior si hay alguna
-		if (currentMusic != null) {
-			currentMusic.stop();
-		}
+        // Detener la música anterior si hay alguna
+        if (currentMusic != null) {
+            currentMusic.stop();
+        }
 
-		// Configurar nueva música
-		currentMusic = newMusic;
-		currentMusic.setLooping(loop);
-		updateMusicVolume(); // Aplica el volumen correcto
+        // Configurar nueva música
+        currentMusic = newMusic;
+        currentMusic.setLooping(loop);
+        updateMusicVolume(); // Aplica el volumen correcto
 
-		if (GamePreferences.getMusicVolume() > 0) {
-			currentMusic.play();
-		}
-	}
-	public void playMusic(Music newMusic, boolean loop) {
-		if (currentMusic != null) {
-			currentMusic.stop();
-		}
+        if (GamePreferences.getMusicVolume() > 0) {
+            currentMusic.play();
+        }
+    }
 
-		// Configurar nueva música
-		currentMusic = newMusic;
-		currentMusic.setLooping(loop);
-		updateSoundVolume();
+    /**
+     * Método que inicia el sonido.
+     *
+     * @param newMusic Ruta del archivo de la música.
+     * @param loop     Si se debe repetir la música o no.
+     */
+    public void playMusic(Music newMusic, boolean loop) {
+        if (currentMusic != null) {
+            currentMusic.stop();
+        }
 
-		if (GamePreferences.getSoundVolume() > 0) {
-			currentMusic.play();
-		}
-	}
+        // Configurar nueva música
+        currentMusic = newMusic;
+        currentMusic.setLooping(loop);
+        updateSoundVolume();
 
-	public void stopMusic() {
-		if (currentMusic != null) {
-			currentMusic.stop();
-			currentMusic = null;
-		}
-	}
+        if (GamePreferences.getSoundVolume() > 0) {
+            currentMusic.play();
+        }
+    }
 
-	public void updateMusicVolume() {
-		if (currentMusic != null) {
-			float volume = GamePreferences.getMusicVolume();
-			currentMusic.setVolume(volume);
+    /**
+     * Método que para la musica actual.
+     */
+    public void stopMusic() {
+        if (currentMusic != null) {
+            currentMusic.stop();
+            currentMusic = null;
+        }
+    }
 
-			// Si el volumen es 0, pausar la música; si es mayor, reanudarla
-			if (volume == 0) {
-				currentMusic.pause();
-			} else if (!currentMusic.isPlaying()) {
-				currentMusic.play();
-			}
-		}
-	}
-	 public void updateSoundVolume() {
-		if (currentSound != null) {
-			float volume = GamePreferences.getSoundVolume();
-			currentSound.setVolume(volume);
+    /**
+     * Metodo que actualiza el volumen de la música.
+     */
+    public void updateMusicVolume() {
+        if (currentMusic != null) {
+            float volume = GamePreferences.getMusicVolume();
+            currentMusic.setVolume(volume);
 
-			// Si el volumen es 0, pausar la música; si es mayor, reanudarla
-			if (volume == 0) {
-				currentSound.pause();
-			} else if (!currentMusic.isPlaying()) {
-				currentSound.play();
-			}
-		}
-	}
-	 public void playSound(Sound sound) {
-		if (GamePreferences.getSoundVolume() > 0) {
-			sound.play(GamePreferences.getSoundVolume());
-		}
-	}
+            // Si el volumen es 0, pausar la música; si es mayor, reanudarla
+            if (volume == 0) {
+                currentMusic.pause();
+            } else if (!currentMusic.isPlaying()) {
+                currentMusic.play();
+            }
+        }
+    }
 
-	@Override
-	public void render() {
-		super.render();
-	}
+    /**
+     * Metodo que actualiza el volumen del sonido.
+     */
+    public void updateSoundVolume() {
+        if (currentSound != null) {
+            float volume = GamePreferences.getSoundVolume();
+            currentSound.setVolume(volume);
 
-	@Override
-	public void dispose() {
-		AssetsManager.dipose();
-		ManagerAudio.dispose();
-		batch.dispose();
-	}
+            // Si el volumen es 0, pausar la música; si es mayor, reanudarla
+            if (volume == 0) {
+                currentSound.pause();
+            } else if (!currentMusic.isPlaying()) {
+                currentSound.play();
+            }
+        }
+    }
+
+    /**
+     * Metodo que inicia el sonido.
+     *
+     * @param sound el sonido a reproducir.
+     */
+    public void playSound(Sound sound) {
+        if (GamePreferences.getSoundVolume() > 0) {
+            sound.play(GamePreferences.getSoundVolume());
+        }
+    }
+
+    /**
+     * Método que renderiza el juego.
+     *
+     * @see Game#render()
+     */
+    @Override
+    public void render() {
+        super.render();
+    }
+
+    /**
+     * Metodo que libera los recursos
+     *
+     * @see Game#dispose()
+     */
+    @Override
+    public void dispose() {
+        AssetsManager.dipose();
+        ManagerAudio.dispose();
+        batch.dispose();
+    }
 
 }

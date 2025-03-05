@@ -2,6 +2,9 @@ package io.FaiscaJsr.DungeonsGame.Tools;
 
 import java.util.Random;
 
+/**
+ * Clase Rectangulo
+ */
 public class Rectangle {
 
     private static int MIN_SIZE = 5;
@@ -15,6 +18,13 @@ public class Rectangle {
     Rectangle rightChild;
     Rectangle dungeon;
 
+    /**
+     * Constructor de la clase Rectangulo
+     * @param top Posicion superior
+     * @param left Posicion izquierda
+     * @param height  Altura
+     * @param width Ancho
+     */
     public Rectangle(int top, int left, int height, int width) {
         this.top = top;
         this.left = left;
@@ -22,6 +32,10 @@ public class Rectangle {
         this.height = height;
     }
 
+    /**
+     * Metodo que divide un rectangulo en dos
+     * @return Retorna true si se ha podido dividir, false en caso contrario
+     */
     public boolean split() {
         if (leftChild != null) // if already split, bail out
             return false;
@@ -42,6 +56,9 @@ public class Rectangle {
         return true; // split successful
     }
 
+    /**
+     * Metodo que genera un dungeon dentro del rectangulo
+     */
     public void generateDungeon() {
         if (leftChild != null) { // if current are has child areas, propagate the call
             leftChild.generateDungeon();
