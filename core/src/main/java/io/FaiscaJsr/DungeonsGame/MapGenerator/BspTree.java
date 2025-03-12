@@ -133,6 +133,9 @@ public class BspTree {
      * Método que libera memoria
      */
     public static void dispose() {
+        for (Room room : rooms) {
+            room.dispose();
+        }
         rooms.clear();
     }
 }

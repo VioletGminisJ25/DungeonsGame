@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
+import io.FaiscaJsr.DungeonsGame.Managers.AssetsManager;
 import io.FaiscaJsr.DungeonsGame.Managers.ManagerAudio;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
@@ -69,7 +70,7 @@ public class Slimes extends Enemy {
      */
     public Slimes(Player player, PlayScreen screen, World world, float x, float y, int maxHealth,
             float damage, float speed, int color) {
-        super(player, world, new Texture("slimes/atlas/Slimes.png"), x, y, maxHealth, damage, speed, screen);
+        super(player, world, AssetsManager.getTexture("slimes/atlas/Slimes.png"), x, y, maxHealth, damage, speed, screen);
         setBounds(x, y, 240 / PlayScreen.PPM, 216 / PlayScreen.PPM);
         this.screen = screen;
         this.world = world;

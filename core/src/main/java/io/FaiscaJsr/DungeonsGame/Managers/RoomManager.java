@@ -37,13 +37,15 @@ public class RoomManager {
         this.rounds = 1;
         this.enemyCantSpawn = 0;
         this.roomInitialized = false;
-        this.enemiesAlive = new ArrayList<Enemy>();
+        this.enemiesAlive = null;
     }
 
     /**
      * Método que inicializa la habitación.
      */
     public void roomInitialized() {
+        enemiesAlive = new ArrayList<Enemy>();
+        room.enemies = new ArrayList<>();
         createEnemies();
         roomInitialized = true;
     }
@@ -74,30 +76,34 @@ public class RoomManager {
      */
     private void enemiesDefeated() {
         int cont = 0;
-        for (Enemy enemy : enemiesAlive) {
-            if (enemy.isDestroyed()) {
-                cont++;
+        if(enemiesAlive != null){
+
+            for (Enemy enemy : enemiesAlive) {
+                if (enemy.isDestroyed()) {
+                    cont++;
+                }
             }
-        }
-        if (roomInitialized) {
-            if (cont == enemiesAlive.size()) {
-                enemiesAlive.clear();
-                if (rounds >= 3) {
-                    finished = true;
-                } else if (rounds == 2) {
-                    SlimeKing slimeKing = new SlimeKing(player, playScreen, PlayScreen.world,
-                            rnd.nextFloat(room.center.x - room.getWidth() * 32 / 3,
-                                    room.center.x + room.getWidth() * 32 / 3),
-                            rnd.nextFloat(room.center.y - room.getHeight() * 32 / 3,
-                                    room.center.y + room.getHeight() * 32 / 3),
-                            50, 1f, 1f);
-                    room.enemies.add(slimeKing);
-                    enemiesAlive.add(slimeKing);
-                    createEnemies();
-                    rounds++;
-                } else {
-                    createEnemies();
-                    rounds++;
+            if (roomInitialized) {
+                if (cont == enemiesAlive.size()) {
+                    enemiesAlive.clear();
+                    if (rounds >= 3) {
+                        finished = true;
+                        enemiesAlive=null;
+                    } else if (rounds == 2) {
+                        SlimeKing slimeKing = new SlimeKing(player, playScreen, PlayScreen.world,
+                        rnd.nextFloat(room.center.x - room.getWidth() * 32 / 3,
+                        room.center.x + room.getWidth() * 32 / 3),
+                        rnd.nextFloat(room.center.y - room.getHeight() * 32 / 3,
+                        room.center.y + room.getHeight() * 32 / 3),
+                        50, 1f, 1f);
+                        room.enemies.add(slimeKing);
+                        enemiesAlive.add(slimeKing);
+                        createEnemies();
+                        rounds++;
+                    } else {
+                        createEnemies();
+                        rounds++;
+                    }
                 }
             }
         }

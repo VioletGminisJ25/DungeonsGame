@@ -4,7 +4,6 @@ import java.util.Random;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
+import io.FaiscaJsr.DungeonsGame.Managers.AssetsManager;
 import io.FaiscaJsr.DungeonsGame.Managers.ManagerAudio;
 import io.FaiscaJsr.DungeonsGame.Screens.PlayScreen;
 import io.FaiscaJsr.DungeonsGame.entities.Player;
@@ -68,7 +68,7 @@ public class SlimeKing extends Enemy {
      */
     public SlimeKing(Player player, PlayScreen screen, World world, float x, float y, int maxHealth, float damage,
             float speed) {
-        super(player, world, new Texture("Bosses/SlimeKing/SlimeKing_Walk_0.png"), x, y, maxHealth, damage, speed,
+        super(player, world, AssetsManager.getTexture("Bosses/SlimeKing/SlimeKing_Walk_0.png"), x, y, maxHealth, damage, speed,
                 screen);
         setBounds(x, y, 340 / PlayScreen.PPM, 340 / PlayScreen.PPM);
         this.screen = screen;
@@ -125,7 +125,6 @@ public class SlimeKing extends Enemy {
             case idle:
             case wander:
                 region = wander.getKeyFrame(stateTimer, true);
-
                 break;
             case dead:
                 if (contSoundDeath == 0) {

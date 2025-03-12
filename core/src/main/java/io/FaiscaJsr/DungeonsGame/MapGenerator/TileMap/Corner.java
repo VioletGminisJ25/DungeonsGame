@@ -19,6 +19,7 @@ public class Corner extends Tile {
     private FixtureDef cornerBodyDef;
     private BodyDef bodyDef;
     private Fixture cornerFixture;
+    public int rotation;
 
     /**
      * Constructor de la esquina.
@@ -29,6 +30,7 @@ public class Corner extends Tile {
      */
     public Corner(float x, float y, int rotationDegrees) {
         super(x, y, ResourceLoader.cornerTile(rotationDegrees));
+        this.rotation = rotationDegrees;
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x + Tile.DIM / 2, y + Tile.DIM / 2);

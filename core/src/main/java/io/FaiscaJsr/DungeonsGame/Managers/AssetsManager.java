@@ -23,6 +23,8 @@ public class AssetsManager {
         assetManager.load("ui/hearts.png", Texture.class);
         assetManager.load("ui/time.png", Texture.class);
         assetManager.load("ui/time_1.png", Texture.class);
+        assetManager.load("slimes/atlas/Slimes.png", Texture.class);
+        assetManager.load("Bosses/SlimeKing/SlimeKing_Walk_0.png",Texture.class);
     }
 
     /**

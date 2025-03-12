@@ -23,7 +23,7 @@ public class Goal extends Tile {
     private BodyDef bodyDef;
     public Fixture goalFixture;
     private Player player;
-    private static int RoomCount = 1;
+    public static int RoomCount = 1;
     public Vector2 coordinates;
     private Room room;
 
@@ -81,6 +81,8 @@ public class Goal extends Tile {
                         BspTree.rooms.get(Player.currentRoom).enemiesSpawned = true;
                     }
                     BspTree.rooms.get(Player.currentRoom - 1).enemies.clear();
+                    BspTree.rooms.get(Player.currentRoom - 1).enemies = null;
+
                 });
             }
         } else {

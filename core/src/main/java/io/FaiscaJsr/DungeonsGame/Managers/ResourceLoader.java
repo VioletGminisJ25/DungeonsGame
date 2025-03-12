@@ -11,15 +11,25 @@ import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Tile;
  */
 public class ResourceLoader {
 	static Texture tiles = AssetsManager.getTexture("tileset_complet.png");
+    private static  Sprite floorSprite;
+    private static Sprite wallSprite;
+    private static Sprite cornerSprite;
+
+    public static void load(){
+        floorSprite = new Sprite(new TextureRegion(tiles,32,32,Tile.DIM,Tile.DIM));
+        wallSprite = new Sprite(new TextureRegion(tiles,32,0,Tile.DIM,Tile.DIM));
+        cornerSprite = new Sprite(new TextureRegion(tiles,0,0,Tile.DIM,Tile.DIM));
+    }
 
     /**
      * Método que carga el sprite de la pared.
      * @return Sprite de la pared.
      */
 	public static Sprite floorTile(){
-		int x = 32;
-		int y = 32;
-		return new Sprite(new TextureRegion(tiles,x,y,Tile.DIM,Tile.DIM));
+		// int x = 32;
+		// int y = 32;
+		// return new Sprite(new TextureRegion(tiles,x,y,Tile.DIM,Tile.DIM));
+        return floorSprite;
 	}
 
     /**
@@ -28,10 +38,11 @@ public class ResourceLoader {
      * @return Sprite de la pared.
      */
 	public static Sprite wallTile(int rotation){
-		int x = 32;
-		int y = 0;
-		TextureRegion region = new TextureRegion(tiles,x,y,Tile.DIM,Tile.DIM);
-		Sprite sprite = new Sprite(region);
+		// int x = 32;
+		// int y = 0;
+		// TextureRegion region = new TextureRegion(tiles,x,y,Tile.DIM,Tile.DIM);
+		// Sprite sprite = new Sprite(region);
+        Sprite sprite = wallSprite;
 		sprite.rotate(rotation);
 		return sprite;
 	}
@@ -42,10 +53,11 @@ public class ResourceLoader {
      * @return Sprite de la pared.
      */
 	public static Sprite cornerTile(int rotation){
-		int x = 0;
-		int y = 0;
-		TextureRegion region = new TextureRegion(tiles,x,y,Tile.DIM,Tile.DIM);
-		Sprite sprite = new Sprite(region);
+		// int x = 0;
+		// int y = 0;
+		// TextureRegion region = new TextureRegion(tiles,x,y,Tile.DIM,Tile.DIM);
+		// Sprite sprite = new Sprite(region);
+		Sprite sprite = cornerSprite;
 		sprite.rotate(rotation);
 		return sprite;
 	}

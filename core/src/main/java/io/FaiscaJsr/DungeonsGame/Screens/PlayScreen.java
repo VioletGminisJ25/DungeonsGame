@@ -21,8 +21,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import io.FaiscaJsr.DungeonsGame.Main;
+import io.FaiscaJsr.DungeonsGame.Managers.ResourceLoader;
 import io.FaiscaJsr.DungeonsGame.Managers.TimeManager;
 import io.FaiscaJsr.DungeonsGame.MapGenerator.BspTree;
+import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Goal;
 import io.FaiscaJsr.DungeonsGame.MapGenerator.TileMap.Tile;
 import io.FaiscaJsr.DungeonsGame.Tools.WorldContactListener;
 import io.FaiscaJsr.DungeonsGame.UI.Hud;
@@ -76,6 +78,10 @@ public class PlayScreen implements Screen {
     public PlayScreen(Main game) {
         super();
         this.game = game;
+        bodiesToRemove.clear();
+        ResourceLoader.load();
+        Goal.RoomCount = 1;
+        Player.currentRoom=0;
         Box2D.init();
         camera = new OrthographicCamera();
         viewport = new FitViewport(1920 / PPM, 1080 / PPM, camera);
@@ -97,6 +103,10 @@ public class PlayScreen implements Screen {
         BspTree.rooms.get(0).roomManager.roomInitialized();
 
         timeManager = new TimeManager(this);
+        TimeManager.timeLeft=5*60;
+        Time.times=0;
+        Heart.hearts.clear();
+        Time.time.clear();
 
     }
 
@@ -197,6 +207,7 @@ public class PlayScreen implements Screen {
             if (enemy.body != null) {
                 world.destroyBody(enemy.body);
                 enemy.body = null;
+                enemy = null;
             }
             // Room.enemies.remove(enemy);
         }

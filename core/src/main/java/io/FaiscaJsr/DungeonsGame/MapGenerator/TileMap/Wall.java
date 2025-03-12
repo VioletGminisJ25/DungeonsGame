@@ -17,6 +17,7 @@ public class Wall extends Tile {
     private FixtureDef wallBodyDef;
     private BodyDef bodyDef;
     private Fixture wallFixture;
+    public int rotation;
 
     /**
      * Constructor de la pared
@@ -27,6 +28,7 @@ public class Wall extends Tile {
      */
     public Wall(float x, float y, int rotationDegrees) {
         super(x, y, ResourceLoader.wallTile(rotationDegrees));
+        this.rotation = rotationDegrees;
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x + Tile.DIM / 2, y + Tile.DIM / 2);

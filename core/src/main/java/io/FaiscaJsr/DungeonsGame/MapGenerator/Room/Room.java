@@ -105,7 +105,7 @@ public class Room implements Disposable {
         floors = new ArrayList<Floor>();
         walls = new ArrayList<Wall>();
         corners = new ArrayList<Corner>();
-        enemies = new ArrayList<Enemy>();
+        enemies =null;
         setup();
         load();
         enemiesSpawned = false;
@@ -261,19 +261,27 @@ public class Room implements Disposable {
     public void draw(SpriteBatch batch) {
 
         for (Wall wall : walls) {
+            wall.getSprite().setPosition(wall.position.x, wall.position.y);
+            wall.getSprite().setRotation(wall.rotation);
             wall.getSprite().draw(batch);
+            // batch.draw(wall.getSprite(), wall.position.x, wall.position.y);
         }
         for (Corner corner : corners) {
+            corner.getSprite().setPosition(corner.position.x, corner.position.y);
+            corner.getSprite().setRotation(corner.rotation);
             corner.getSprite().draw(batch);
+            // batch.draw(corner.getSprite(), corner.position.x, corner.position.y);
         }
         for (Floor floor : floors) {
             batch.draw(floor.getSprite(), floor.position.x, floor.position.y);
         }
         goal.getSprite().draw(batch);
         reverseGoal.getSprite().draw(batch);
-        for (Enemy enemy : enemies) {
-            enemy.draw(batch);
-            enemy.update(Gdx.graphics.getDeltaTime());
+        if (enemies != null) {
+            for (Enemy enemy : enemies) {
+                enemy.draw(batch);
+                enemy.update(Gdx.graphics.getDeltaTime());
+            }
         }
 
     }
@@ -306,19 +314,11 @@ public class Room implements Disposable {
      */
     @Override
     public void dispose() {
-        for (Wall wall : walls) {
-            wall.dispose();
-        }
-        for (Corner corner : corners) {
-            corner.dispose();
-        }
-        for (Floor floor : floors) {
-            floor.dispose();
-        }
-        goal.dispose();
-        reverseGoal.dispose();
-        for (Enemy enemy : enemies) {
-            enemy.dispose();
-        }
+        walls.clear();
+        floors.clear();
+        corners.clear();
+        // for (Enemy enemy : enemies) {
+        //     enemy.dispose();
+        // }
     }
 }
